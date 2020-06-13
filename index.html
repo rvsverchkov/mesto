@@ -16,54 +16,54 @@
                 <div class="profile__avatar"></div>
                 <div class="profile__info">
                     <div class="profile__text">
-                        <h2 class="profile__name">Жак-Ив Кусто</h2>
-                        <button class="profile__edit-button"></button>
+                        <h1 class="profile__name">Жак-Ив Кусто</h1>
+                        <button type="button" class="profile__edit-button"></button>
                     </div>
                     <p class="profile__activity">Исследователь океана</p>
                 </div>
-                <button class="profile__add-button"></button>
+                <button type="button" class="profile__add-button"></button>
             </section>
             <section class="elements">
-                <div class="elements__element">
-                    <img class="elements__picture" src="./images/london.jpg" alt="Лондон">
-                    <div class="elements__title">
-                        <h3 class="elements__text">Лондон</h3>
-                        <button class="elements__like"></button>
+                <div class="card">
+                    <img class="card__picture" src="./images/london.jpg" alt="Лондон">
+                    <div class="card__title">
+                        <h3 class="card__text">Лондон</h3>
+                        <button type="button" class="card__like"></button>
                     </div>
                 </div>
-                <div class="elements__element">
-                    <img class="elements__picture" src="./images/moscow.jpg" alt="Москва">
-                    <div class="elements__title">
-                        <h3 class="elements__text">Москва</h3>
-                        <button class="elements__like"></button>
+                <div class="card">
+                    <img class="card__picture" src="./images/moscow.jpg" alt="Москва">
+                    <div class="card__title">
+                        <h3 class="card__text">Москва</h3>
+                        <button class="card__like"></button>
                     </div>
                 </div>
-                <div class="elements__element">
-                    <img class="elements__picture" src="./images/new-york.jpg" alt="Нью-Йорк">
-                    <div class="elements__title">
-                        <h3 class="elements__text">Нью-Йорк</h3>
-                        <button class="elements__like"></button>
+                <div class="card">
+                    <img class="card__picture" src="./images/new-york.jpg" alt="Нью-Йорк">
+                    <div class="card__title">
+                        <h3 class="card__text">Нью-Йорк</h3>
+                        <button class="card__like"></button>
                     </div>
                 </div>
-                <div class="elements__element">
-                    <img class="elements__picture" src="./images/paris.jpg" alt="Париж">
-                    <div class="elements__title">
-                        <h3 class="elements__text">Париж</h3>
-                        <button class="elements__like"></button>
+                <div class="card">
+                    <img class="card__picture" src="./images/paris.jpg" alt="Париж">
+                    <div class="card__title">
+                        <h3 class="card__text">Париж</h3>
+                        <button class="card__like"></button>
                     </div>
                 </div>
-                <div class="elements__element">
-                    <img class="elements__picture" src="./images/tokyo.jpg" alt="Токио">
-                    <div class="elements__title">
-                        <h3 class="elements__text">Токио</h3>
-                        <button class="elements__like"></button>
+                <div class="card">
+                    <img class="card__picture" src="./images/tokyo.jpg" alt="Токио">
+                    <div class="card__title">
+                        <h3 class="card__text">Токио</h3>
+                        <button class="card__like"></button>
                     </div>
                 </div>
-                <div class="elements__element">
-                    <img class="elements__picture" src="./images/amsterdam.jpg" alt="Амстердам">
-                    <div class="elements__title">
-                        <h3 class="elements__text">Амстердам</h3>
-                        <button class="elements__like"></button>
+                <div class="card">
+                    <img class="card__picture" src="./images/amsterdam.jpg" alt="Амстердам">
+                    <div class="card__title">
+                        <h3 class="card__text">Амстердам</h3>
+                        <button class="card__like"></button>
                     </div>
                 </div>
             </section>
@@ -73,11 +73,11 @@
         </main>
         <section class="popup">
             <div class="popup__container">
-                <img class="popup__close" src="./images/close-icon.svg" alt="Кнопка закрытия">
+                <button type="button" class="popup__close"></button>
                 <h3 class="popup__edit-title">Редактировать профиль</h3>
-                <form class="popup__form">
-                    <input type="text" placeholder="Ваше имя" class="popup__name-input">
-                    <input type="text" placeholder="Ваша работа" class="popup__job-input">
+                <form method="#" action="#" class="popup__form">
+                    <input type="text" placeholder="Ваше имя" class="popup__name-input popup__input" required>
+                    <input type="text" placeholder="Ваша работа" class="popup__job-input popup__input" required>
                     <button type="submit" class="popup__save">Сохранить</button>
                 </form>
             </div>

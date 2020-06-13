@@ -1,9 +1,3 @@
-@import url(../../blocks/elements/__element/elements__element.css);
-@import url(../../blocks/elements/__like/elements__like.css);
-@import url(../../blocks/elements/__picture/elements__picture.css);
-@import url(../../blocks/elements/__text/elements__text.css);
-@import url(../../blocks/elements/__title/elements__title.css);
-
 .elements {
     max-width: 882px;
     margin: 0 auto;
@@ -11,4 +5,6 @@
     grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
     grid-column-gap: 18px;
     grid-row-gap: 20px;
+    padding-left: 19px;
+    padding-right: 19px;
 }

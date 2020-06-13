@@ -1,7 +1,8 @@
-.elements__title {
+.card__title {
     background-color: white;
     width: 100%;
-    height: 79px;
+    padding-top: 25px;
+    padding-bottom: 24px;
     border-radius: 0 0 10px 10px;
     display: flex;
     flex-direction: row;
