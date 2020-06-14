@@ -10,4 +10,9 @@
     height: 19px;
     margin-right: 18px;
     padding: 0;
+    cursor: pointer;
+}
+
+.card__like:hover {
+    opacity: .6;
 }
