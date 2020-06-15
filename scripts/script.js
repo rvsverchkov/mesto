@@ -10,8 +10,12 @@ const saveButton = popup.querySelector('.popup__save');
 
 let popupToggle = function() {
     popup.classList.toggle('popup_opened');     //Добавил занесение данных в форму при открытии popup'а
-    nameInput.value = name.textContent;
-    jobInput.value = job.textContent;
+    if (popup.classList.contains('popup_opened')) {
+        nameInput.value = name.textContent;
+        jobInput.value = job.textContent;
+    } else {
+        return;
+    }
 };
 
 let formSubmitHandler = function(evt) {
