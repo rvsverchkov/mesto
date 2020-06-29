@@ -24,48 +24,6 @@
                 <button type="button" class="profile__add-button"></button>
             </section>
             <section class="elements">
-                <div class="card">
-                    <img class="card__picture" src="./images/london.jpg" alt="Лондон">
-                    <div class="card__title">
-                        <h3 class="card__text">Лондон</h3>
-                        <button type="button" class="card__like"></button>
-                    </div>
-                </div>
-                <div class="card">
-                    <img class="card__picture" src="./images/moscow.jpg" alt="Москва">
-                    <div class="card__title">
-                        <h3 class="card__text">Москва</h3>
-                        <button class="card__like"></button>
-                    </div>
-                </div>
-                <div class="card">
-                    <img class="card__picture" src="./images/new-york.jpg" alt="Нью-Йорк">
-                    <div class="card__title">
-                        <h3 class="card__text">Нью-Йорк</h3>
-                        <button class="card__like"></button>
-                    </div>
-                </div>
-                <div class="card">
-                    <img class="card__picture" src="./images/paris.jpg" alt="Париж">
-                    <div class="card__title">
-                        <h3 class="card__text">Париж</h3>
-                        <button class="card__like"></button>
-                    </div>
-                </div>
-                <div class="card">
-                    <img class="card__picture" src="./images/tokyo.jpg" alt="Токио">
-                    <div class="card__title">
-                        <h3 class="card__text">Токио</h3>
-                        <button class="card__like"></button>
-                    </div>
-                </div>
-                <div class="card">
-                    <img class="card__picture" src="./images/amsterdam.jpg" alt="Амстердам">
-                    <div class="card__title">
-                        <h3 class="card__text">Амстердам</h3>
-                        <button class="card__like"></button>
-                    </div>
-                </div>
             </section>
             <footer class="footer">
                 <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
@@ -83,6 +41,15 @@
             </div>
         </section>
     </div>
+    <template id="card">
+        <div class="card">
+            <img class="card__picture">
+            <div class="card__title">
+                <h3 class="card__text"></h3>
+                <button type="button" class="card__like"></button>
+            </div>
+        </div>
+    </template>
     <script src='./scripts/script.js'></script>
 </body>
 </html>
