@@ -25,8 +25,8 @@ const initialCards = [
     }
 ];
 const popup = document.querySelector('.popup');     //Перенес объявление переменных/констант в начало файла
-const popupEdit = document.querySelector('.popup_type_edit-profile');
-const popupCreate = document.querySelector('.popup_type_create-card');
+const popupEdit = document.querySelector('.popup_edit-profile');
+const popupCreate = document.querySelector('.popup_create-card');
 const popupOpenButton = document.querySelector('.profile__edit-button');
 const addCardButton = document.querySelector('.profile__add-button');
 const popupCloseEditButton = document.querySelector('.popup__close-edit');
@@ -41,6 +41,7 @@ const placeInput = document.querySelector('.popup__input_type_place');
 const linkInput = document.querySelector('.popup__input_type_link');
 const cardTemplate = document.querySelector('#card').content;
 const elements = document.querySelector('.elements');
+const buttonLike = cardTemplate.querySelector('.card__like');
 
 let popupEditProfile = function() {
     popupEdit.classList.toggle('popup_opened');
@@ -78,7 +79,12 @@ let createCard = function(name, link) {
     card.querySelector('.card__picture').src = link;
     card.querySelector('.card__picture').alt = name;
     card.querySelector('.card__text').textContent = name;
+    card.querySelector('.card__like').addEventListener('click', toggleLike);
     elements.prepend(card);
+}
+
+let toggleLike = function(evt) {
+    evt.target.classList.toggle('card__like_active');
 }
 
 formElementEdit.addEventListener('submit', formSubmitHandlerProfile);      //Переместил слушатели событий в конец файла
@@ -87,7 +93,6 @@ popupCloseEditButton.addEventListener('click', popupEditProfile);
 formElementAdd.addEventListener('submit', formSubmitHandlerCard);
 addCardButton.addEventListener('click', popupCreateCard);
 popupCloseAddButton.addEventListener('click', popupCreateCard);
-
 
 initialCards.forEach(function(element) {
     createCard(element.name, element.link);
