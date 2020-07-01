@@ -1,30 +1,6 @@
-const initialCards = [
-    {
-        name: 'Амстердам',
-        link: './images/amsterdam.jpg'
-    },
-    {
-        name: 'Токио',
-        link: './images/tokyo.jpg'
-    },
-    {
-        name: 'Париж',
-        link: './images/paris.jpg'
-    },
-    {
-        name: 'Нью-Йорк',
-        link: './images/new-york.jpg'
-    },
-    {
-        name: 'Москва',
-        link: './images/moscow.jpg'
-    },
-    {
-        name: 'Лондон',
-        link: './images/london.jpg'
-    }
-];
-const popup = document.querySelector('.popup');     //Перенес объявление переменных/констант в начало файла
+import {initialCards} from './utils.js';
+
+const popup = document.querySelector('.popup');
 const popupEdit = document.querySelector('.popup_edit-profile');
 const popupCreate = document.querySelector('.popup_create-card');
 const popupOpenButton = document.querySelector('.profile__edit-button');
@@ -44,7 +20,7 @@ const elements = document.querySelector('.elements');
 const buttonLike = cardTemplate.querySelector('.card__like');
 const previewCloseButton = document.querySelector('.popup__close-preview');
 
-let popupEditProfile = function() {
+const popupEditProfile = function() {
     popupEdit.classList.toggle('popup_opened');
     if (popupEdit.classList.contains('popup_opened')) {
         nameInput.value = name.textContent;
@@ -54,7 +30,7 @@ let popupEditProfile = function() {
     }
 };
 
-let popupCreateCard = function() {
+const popupCreateCard = function() {
     popupCreate.classList.toggle('popup_opened');
     if (popupCreate.classList.contains('popup_opened')) {
         placeInput.value = '';
@@ -62,36 +38,36 @@ let popupCreateCard = function() {
     }
 };
 
-let formSubmitHandlerProfile = function(evt) {
+const formSubmitHandlerProfile = function(evt) {
     evt.preventDefault();
     name.textContent = nameInput.value;
     job.textContent = jobInput.value;
     popupEditProfile();
 };
 
-let formSubmitHandlerCard = function(evt) {
+const formSubmitHandlerCard = function(evt) {
     evt.preventDefault();
     createCard( placeInput.value, linkInput.value);
     popupCreateCard();
 }
 
-let likeToggle = function(evt) {
+const likeToggle = function(evt) {
     evt.target.classList.toggle('card__like_active');
 }
 
-let deleteCard = function(evt) {
+const deleteCard = function(evt) {
     const currentCard = evt.target.closest('.card');
     currentCard.remove();
 }
 
-let previewCard = function(evt) {
+const previewCard = function(evt) {
     const previewPopup = document.querySelector('.popup_preview');
     previewPopup.classList.toggle('popup_opened');
     previewPopup.querySelector('.popup__picture').src = evt.target.src;
     previewPopup.querySelector('.popup__description').textContent = evt.target.alt;
 }
 
-let createCard = function(name, link) {
+const createCard = function(name, link) {
     const card = cardTemplate.cloneNode(true);
     card.querySelector('.card__picture').src = link;
     card.querySelector('.card__picture').alt = name;
