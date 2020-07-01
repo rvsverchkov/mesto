@@ -1,15 +1,15 @@
 .card__trash {
     position: absolute;
     background-size: cover;
-    background-repeat: no-repeat;
     background: url(../../../images/trash-card.svg);
     top: 18px;
     right: 15px;
     width: 18px;
-    height: 19.3px;
+    height: 20px;
     outline: none;
     border: 0;
     cursor: pointer;
+    background-repeat: no-repeat;
 }
 
 .card__trash:hover {

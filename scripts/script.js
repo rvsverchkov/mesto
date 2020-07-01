@@ -42,6 +42,7 @@ const linkInput = document.querySelector('.popup__input_type_link');
 const cardTemplate = document.querySelector('#card').content;
 const elements = document.querySelector('.elements');
 const buttonLike = cardTemplate.querySelector('.card__like');
+const previewCloseButton = document.querySelector('.popup__close-preview');
 
 let popupEditProfile = function() {
     popupEdit.classList.toggle('popup_opened');
@@ -74,17 +75,6 @@ let formSubmitHandlerCard = function(evt) {
     popupCreateCard();
 }
 
-let createCard = function(name, link) {
-    const card = cardTemplate.cloneNode(true);
-    card.querySelector('.card__picture').src = link;
-    card.querySelector('.card__picture').alt = name;
-    card.querySelector('.card__text').textContent = name;
-    card.querySelector('.card__like').addEventListener('click', likeToggle);
-    card.querySelector('.card__trash').addEventListener('click', deleteCard);
-
-    elements.prepend(card);
-}
-
 let likeToggle = function(evt) {
     evt.target.classList.toggle('card__like_active');
 }
@@ -94,12 +84,31 @@ let deleteCard = function(evt) {
     currentCard.remove();
 }
 
+let previewCard = function(evt) {
+    const previewPopup = document.querySelector('.popup_preview');
+    previewPopup.classList.toggle('popup_opened');
+    previewPopup.querySelector('.popup__picture').src = evt.target.src;
+    previewPopup.querySelector('.popup__description').textContent = evt.target.alt;
+}
+
+let createCard = function(name, link) {
+    const card = cardTemplate.cloneNode(true);
+    card.querySelector('.card__picture').src = link;
+    card.querySelector('.card__picture').alt = name;
+    card.querySelector('.card__text').textContent = name;
+    card.querySelector('.card__like').addEventListener('click', likeToggle);
+    card.querySelector('.card__trash').addEventListener('click', deleteCard);
+    card.querySelector('.card__picture').addEventListener('click', previewCard);
+    elements.prepend(card);
+}
+
 formElementEdit.addEventListener('submit', formSubmitHandlerProfile);      //Переместил слушатели событий в конец файла
 popupOpenButton.addEventListener('click', popupEditProfile);
 popupCloseEditButton.addEventListener('click', popupEditProfile);
 formElementAdd.addEventListener('submit', formSubmitHandlerCard);
 addCardButton.addEventListener('click', popupCreateCard);
 popupCloseAddButton.addEventListener('click', popupCreateCard);
+previewCloseButton.addEventListener('click', previewCard);
 
 initialCards.forEach(function(element) {
     createCard(element.name, element.link);
