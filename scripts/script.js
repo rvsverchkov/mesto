@@ -79,12 +79,19 @@ let createCard = function(name, link) {
     card.querySelector('.card__picture').src = link;
     card.querySelector('.card__picture').alt = name;
     card.querySelector('.card__text').textContent = name;
-    card.querySelector('.card__like').addEventListener('click', toggleLike);
+    card.querySelector('.card__like').addEventListener('click', likeToggle);
+    card.querySelector('.card__trash').addEventListener('click', deleteCard);
+
     elements.prepend(card);
 }
 
-let toggleLike = function(evt) {
+let likeToggle = function(evt) {
     evt.target.classList.toggle('card__like_active');
+}
+
+let deleteCard = function(evt) {
+    const currentCard = evt.target.closest('.card');
+    currentCard.remove();
 }
 
 formElementEdit.addEventListener('submit', formSubmitHandlerProfile);      //Переместил слушатели событий в конец файла
