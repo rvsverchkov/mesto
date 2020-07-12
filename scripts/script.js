@@ -128,6 +128,8 @@ const activateValidation = () => {  //Активация валидации
     });
 };
 
+activateValidation();
+
 formElementEdit.addEventListener('submit', formSubmitHandlerProfile);
 popupOpenButton.addEventListener('click', popupEditProfile);
 popupCloseEditButton.addEventListener('click', popupEditProfile);
@@ -154,5 +156,3 @@ popups.forEach(function(element) {
         }
     });
 });
-
-activateValidation();
