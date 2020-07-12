@@ -1,6 +1,6 @@
 import {initialCards} from './utils.js';
 
-const popup = document.querySelector('.popup');
+const popups = Array.from(document.querySelectorAll('.popup'));
 const popupEdit = document.querySelector('.popup_edit-profile');
 const popupCreate = document.querySelector('.popup_create-card');
 const popupOpenButton = document.querySelector('.profile__edit-button');
@@ -78,7 +78,7 @@ const createCard = function(name, link) {
     elements.prepend(card);
 }
 
-const checkInputValidity = (formElement, inputElement) => {
+const checkInputValidity = (formElement, inputElement) => {    //Проверка валидности вводимого текста/URL
     if (!inputElement.validity.valid) {
         showInputError(formElement, inputElement, inputElement.validationMessage);
         saveButtons.forEach(function(saveButton) {
@@ -96,7 +96,7 @@ const checkInputValidity = (formElement, inputElement) => {
     }
 };
 
-const setEventListeners = (formElement) => {
+const setEventListeners = (formElement) => {    //Перебор массива полей ввода с установкой слушателей
     const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', function() {
@@ -105,20 +105,20 @@ const setEventListeners = (formElement) => {
     });
 };
 
-const showInputError = (formElement, inputElement, errorMessage) => {
+const showInputError = (formElement, inputElement, errorMessage) => {   //Показ ошибки при вводе
     const errorItem = formElement.querySelector(`#${inputElement.id}-error`);
     errorItem.textContent = errorMessage;
     inputElement.classList.add('popup__input_type_error');
 
 };
 
-const hideInputError = (formElement, inputElement) => {
+const hideInputError = (formElement, inputElement) => {    //Скрытие сообщения об ошибке при вводе
     const errorItem = formElement.querySelector(`#${inputElement.id}-error`);
     errorItem.textContent = '';
     inputElement.classList.remove('popup__input_type_error');
 }
 
-const activateValidation = () => {
+const activateValidation = () => {  //Активация валидации                                      
     const formList = Array.from(document.querySelectorAll('.popup__form'))
     formList.forEach((formElement) => {
         formElement.addEventListener('submit', (evt) => {
@@ -128,7 +128,7 @@ const activateValidation = () => {
     });
 };
 
-formElementEdit.addEventListener('submit', formSubmitHandlerProfile);      //Переместил слушатели событий в конец файла
+formElementEdit.addEventListener('submit', formSubmitHandlerProfile);
 popupOpenButton.addEventListener('click', popupEditProfile);
 popupCloseEditButton.addEventListener('click', popupEditProfile);
 formElementAdd.addEventListener('submit', formSubmitHandlerCard);
@@ -138,6 +138,21 @@ previewCloseButton.addEventListener('click', previewCard);
 
 initialCards.forEach(function(element) {
     createCard(element.name, element.link);
+});
+
+popups.forEach(function(element) {
+    element.addEventListener('click', function(evt) {   //Закрытие popup'а по нажатию на overlay
+        if (evt.target !== evt.currentTarget) {
+            return
+        } else {
+            element.classList.remove('popup_opened');
+        }
+    });
+    document.addEventListener('keydown', function(evt) {    //Закрытие popup'а по нажатию клавиша Escape
+        if (evt.key === 'Escape') {
+            element.classList.remove('popup_opened');
+        }
+    });
 });
 
 activateValidation();
