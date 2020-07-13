@@ -143,7 +143,7 @@ initialCards.forEach(function(element) {
 });
 
 popups.forEach(function(element) {
-    element.addEventListener('click', function(evt) {   //Закрытие popup'а по нажатию на overlay
+    element.addEventListener('mousedown', function(evt) {   //Закрытие popup'а по нажатию на overlay
         if (evt.target !== evt.currentTarget) {
             return
         } else {
