@@ -18,32 +18,26 @@ const elements = document.querySelector('.elements');
 const previewCloseButton = document.querySelector('.popup__close-preview');
 const saveButtons = document.querySelectorAll('.popup__save');
 
-const closeEsc = function(evt, popup) {
-    if (evt.key === 'Escape') {
-        popup.classList.remove('popup_opened');
-        console.log('123');
-    }
-}
-
-const addCloseEsc = function(popup) {
-    document.addEventListener('keydown', function() {
-        closeEsc(popup);
-    });
-}
-
-const removeCloseEsc = function(popup) {
-    document.removeEventListener('keydown', function(evt) {
-        if (evt.key === 'Escape') {
-            popup.classList.remove('popup_opened');
-            console.log('123');
-        }
-    });
+const closePopup = function() { //Создал отдельную функцию для закрытия popup'а, поскольку в изначальном коде не получалось это реализовать
+    const focusPopup = document.querySelector('.popup_opened');
+    popupToggle(focusPopup);
+    removeCloseOnEsc(); //Вместо условной конструкции добавил удаление уже в саму функцию закрытия popup'а
 };
 
-const openPopupEditProfile = function() {   //Изменил название на более понятное и отражающее функционал
-    popupToggle(popupEdit);    //Заменил дублировавщийся код на функцию popupToggle()
+const addCloseOnEsc = function() { //Создал функцию по добавлению обработки нажатия ESC и закрытия popup'а
+    if (event.key === 'Escape') {
+        closePopup();
+    }
+};
+
+const removeCloseOnEsc = function() { //Создал функцию удаления обработки нажатия ESC
+    document.removeEventListener('keydown', addCloseOnEsc);
+}
+
+const openPopupEditProfile = function() { //Изменил название на более понятное и отражающее функционал
+    popupToggle(popupEdit); //Заменил дублировавщийся код на функцию popupToggle()
+    document.addEventListener('keydown', addCloseOnEsc); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
     if (popupEdit.classList.contains('popup_opened')) {
-        addCloseEsc(popupEdit);
         nameInput.value = name.textContent;
         jobInput.value = job.textContent;
     } else {
@@ -51,12 +45,12 @@ const openPopupEditProfile = function() {   //Изменил название н
     }
 };
 
-const openPopupCreateCard = function() {    //Изменил название на более понятное и отражающее функционал
-    popupToggle(popupCreate);   //Заменил дублировавщийся код на функцию popupToggle()
+const openPopupCreateCard = function() { //Изменил название на более понятное и отражающее функционал
+    popupToggle(popupCreate); //Заменил дублировавщийся код на функцию popupToggle()
+    document.addEventListener('keydown', addCloseOnEsc); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
     if (popupCreate.classList.contains('popup_opened')) {
         placeInput.value = '';
         linkInput.value = '';
-        addCloseEsc(popupCreate);
     }
 };
 
@@ -91,9 +85,7 @@ const previewCard = function(evt) {
     previewPopup.classList.toggle('popup_opened');
     previewPopup.querySelector('.popup__picture').src = evt.target.src;
     previewPopup.querySelector('.popup__description').textContent = evt.target.alt;
-    if (previewPopup.classList.contains('popup_opened')) {
-        addCloseEsc(previewPopup);
-    }
+    document.addEventListener('keydown', addCloseOnEsc); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
 };
 
 const createCard = function(name, link) {
@@ -180,10 +172,4 @@ popups.forEach(function(element) {
             element.classList.remove('popup_opened');
         }
     });
-    /*document.addEventListener('keydown', function(evt) {    //Закрытие popup'а по нажатию клавиша Escape
-        if (evt.key === 'Escape') {
-            element.classList.remove('popup_opened');
-            console.log('123');
-        }
-    });*/
 });
