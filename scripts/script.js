@@ -1,5 +1,3 @@
-import {initialCards} from './utils.js';
-
 const popups = Array.from(document.querySelectorAll('.popup'));
 const popupEdit = document.querySelector('.popup_edit-profile');
 const popupCreate = document.querySelector('.popup_create-card');
@@ -20,9 +18,32 @@ const elements = document.querySelector('.elements');
 const previewCloseButton = document.querySelector('.popup__close-preview');
 const saveButtons = document.querySelectorAll('.popup__save');
 
-const popupEditProfile = function() {
-    popupEdit.classList.toggle('popup_opened');
+const closeEsc = function(evt, popup) {
+    if (evt.key === 'Escape') {
+        popup.classList.remove('popup_opened');
+        console.log('123');
+    }
+}
+
+const addCloseEsc = function(popup) {
+    document.addEventListener('keydown', function() {
+        closeEsc(popup);
+    });
+}
+
+const removeCloseEsc = function(popup) {
+    document.removeEventListener('keydown', function(evt) {
+        if (evt.key === 'Escape') {
+            popup.classList.remove('popup_opened');
+            console.log('123');
+        }
+    });
+};
+
+const openPopupEditProfile = function() {   //Изменил название на более понятное и отражающее функционал
+    popupToggle(popupEdit);    //Заменил дублировавщийся код на функцию popupToggle()
     if (popupEdit.classList.contains('popup_opened')) {
+        addCloseEsc(popupEdit);
         nameInput.value = name.textContent;
         jobInput.value = job.textContent;
     } else {
@@ -30,11 +51,12 @@ const popupEditProfile = function() {
     }
 };
 
-const popupCreateCard = function() {
-    popupCreate.classList.toggle('popup_opened');
+const openPopupCreateCard = function() {    //Изменил название на более понятное и отражающее функционал
+    popupToggle(popupCreate);   //Заменил дублировавщийся код на функцию popupToggle()
     if (popupCreate.classList.contains('popup_opened')) {
         placeInput.value = '';
         linkInput.value = '';
+        addCloseEsc(popupCreate);
     }
 };
 
@@ -42,41 +64,49 @@ const formSubmitHandlerProfile = function(evt) {
     evt.preventDefault();
     name.textContent = nameInput.value;
     job.textContent = jobInput.value;
-    popupEditProfile();
+    openPopupEditProfile();
 };
 
 const formSubmitHandlerCard = function(evt) {
     evt.preventDefault();
     createCard( placeInput.value, linkInput.value);
-    popupCreateCard();
+    openPopupCreateCard();
+}; //Добавил во всем файле отсутствующие точки с запятой
+
+const popupToggle = function(popup) {   //Вынес открытие popup'ов в отдельную функцию, чтобы не было дублирования кода
+    popup.classList.toggle('popup_opened');
 }
 
 const likeToggle = function(evt) {
     evt.target.classList.toggle('card__like_active');
-}
+};
 
 const deleteCard = function(evt) {
     const currentCard = evt.target.closest('.card');
     currentCard.remove();
-}
+};
 
 const previewCard = function(evt) {
     const previewPopup = document.querySelector('.popup_preview');
     previewPopup.classList.toggle('popup_opened');
     previewPopup.querySelector('.popup__picture').src = evt.target.src;
     previewPopup.querySelector('.popup__description').textContent = evt.target.alt;
-}
+    if (previewPopup.classList.contains('popup_opened')) {
+        addCloseEsc(previewPopup);
+    }
+};
 
 const createCard = function(name, link) {
     const card = cardTemplate.cloneNode(true);
-    card.querySelector('.card__picture').src = link;
-    card.querySelector('.card__picture').alt = name;
+    const cardPicture = card.querySelector('.card__picture'); //Вынес поиск cardPicture в отдельную переменную, чтобы не было дублирования кода
+    cardPicture.src = link; //Заменил поиск нужной картинки на переменную cardPicture
+    cardPicture.alt = name; //Заменил поиск нужной картинки на переменную cardPicture
     card.querySelector('.card__text').textContent = name;
     card.querySelector('.card__like').addEventListener('click', likeToggle);
     card.querySelector('.card__trash').addEventListener('click', deleteCard);
-    card.querySelector('.card__picture').addEventListener('click', previewCard);
+    cardPicture.addEventListener('click', previewCard); //Заменил поиск нужной картинки на переменную cardPicture
     elements.prepend(card);
-}
+};
 
 const checkInputValidity = (formElement, inputElement) => {    //Проверка валидности вводимого текста/URL
     if (!inputElement.validity.valid) {
@@ -116,7 +146,7 @@ const hideInputError = (formElement, inputElement) => {    //Скрытие со
     const errorItem = formElement.querySelector(`#${inputElement.id}-error`);
     errorItem.textContent = '';
     inputElement.classList.remove('popup__input_type_error');
-}
+};
 
 const activateValidation = () => {  //Активация валидации                                      
     const formList = Array.from(document.querySelectorAll('.popup__form'))
@@ -131,11 +161,11 @@ const activateValidation = () => {  //Активация валидации
 activateValidation();
 
 formElementEdit.addEventListener('submit', formSubmitHandlerProfile);
-popupOpenButton.addEventListener('click', popupEditProfile);
-popupCloseEditButton.addEventListener('click', popupEditProfile);
+popupOpenButton.addEventListener('click', openPopupEditProfile);
+popupCloseEditButton.addEventListener('click', openPopupEditProfile);
 formElementAdd.addEventListener('submit', formSubmitHandlerCard);
-addCardButton.addEventListener('click', popupCreateCard);
-popupCloseAddButton.addEventListener('click', popupCreateCard);
+addCardButton.addEventListener('click', openPopupCreateCard);
+popupCloseAddButton.addEventListener('click', openPopupCreateCard);
 previewCloseButton.addEventListener('click', previewCard);
 
 initialCards.forEach(function(element) {
@@ -150,9 +180,10 @@ popups.forEach(function(element) {
             element.classList.remove('popup_opened');
         }
     });
-    document.addEventListener('keydown', function(evt) {    //Закрытие popup'а по нажатию клавиша Escape
+    /*document.addEventListener('keydown', function(evt) {    //Закрытие popup'а по нажатию клавиша Escape
         if (evt.key === 'Escape') {
             element.classList.remove('popup_opened');
+            console.log('123');
         }
-    });
+    });*/
 });
