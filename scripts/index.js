@@ -32,7 +32,7 @@ const addCloseOnEsc = function() { //Создал функцию по добав
 
 const removeCloseOnEsc = function() { //Создал функцию удаления обработки нажатия ESC
     document.removeEventListener('keydown', addCloseOnEsc);
-}
+};
 
 const openPopupEditProfile = function() { //Изменил название на более понятное и отражающее функционал
     popupToggle(popupEdit); //Заменил дублировавщийся код на функцию popupToggle()
@@ -69,7 +69,7 @@ const formSubmitHandlerCard = function(evt) {
 
 const popupToggle = function(popup) {   //Вынес открытие popup'ов в отдельную функцию, чтобы не было дублирования кода
     popup.classList.toggle('popup_opened');
-}
+};
 
 const likeToggle = function(evt) {
     evt.target.classList.toggle('card__like_active');
@@ -88,6 +88,10 @@ const previewCard = function(evt) {
     document.addEventListener('keydown', addCloseOnEsc); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
 };
 
+const addCardIn = (item) => { //Вынес добавление карточки в DOM в отдельную функцию
+    elements.prepend(item);
+};
+
 const createCard = function(name, link) {
     const card = cardTemplate.cloneNode(true);
     const cardPicture = card.querySelector('.card__picture'); //Вынес поиск cardPicture в отдельную переменную, чтобы не было дублирования кода
@@ -97,60 +101,9 @@ const createCard = function(name, link) {
     card.querySelector('.card__like').addEventListener('click', likeToggle);
     card.querySelector('.card__trash').addEventListener('click', deleteCard);
     cardPicture.addEventListener('click', previewCard); //Заменил поиск нужной картинки на переменную cardPicture
-    elements.prepend(card);
+    //elements.prepend(card);
+    addCardIn(card);
 };
-
-const checkInputValidity = (formElement, inputElement) => {    //Проверка валидности вводимого текста/URL
-    if (!inputElement.validity.valid) {
-        showInputError(formElement, inputElement, inputElement.validationMessage);
-        saveButtons.forEach(function(saveButton) {
-            saveButton.classList.add('popup__save_type_disabled');
-        });
-        formElementEdit.removeEventListener('submit', formSubmitHandlerProfile);
-        formElementAdd.removeEventListener('submit', formSubmitHandlerCard);
-    } else {
-        hideInputError(formElement, inputElement);
-        saveButtons.forEach(function(saveButton) {
-            saveButton.classList.remove('popup__save_type_disabled');
-        });
-        formElementEdit.addEventListener('submit', formSubmitHandlerProfile);
-        formElementAdd.addEventListener('submit', formSubmitHandlerCard);
-    }
-};
-
-const setEventListeners = (formElement) => {    //Перебор массива полей ввода с установкой слушателей
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-    inputList.forEach((inputElement) => {
-        inputElement.addEventListener('input', function() {
-            checkInputValidity(formElement, inputElement);
-        });
-    });
-};
-
-const showInputError = (formElement, inputElement, errorMessage) => {   //Показ ошибки при вводе
-    const errorItem = formElement.querySelector(`#${inputElement.id}-error`);
-    errorItem.textContent = errorMessage;
-    inputElement.classList.add('popup__input_type_error');
-
-};
-
-const hideInputError = (formElement, inputElement) => {    //Скрытие сообщения об ошибке при вводе
-    const errorItem = formElement.querySelector(`#${inputElement.id}-error`);
-    errorItem.textContent = '';
-    inputElement.classList.remove('popup__input_type_error');
-};
-
-const activateValidation = () => {  //Активация валидации                                      
-    const formList = Array.from(document.querySelectorAll('.popup__form'))
-    formList.forEach((formElement) => {
-        formElement.addEventListener('submit', (evt) => {
-            evt.preventDefault();
-        });
-        setEventListeners(formElement);
-    });
-};
-
-activateValidation();
 
 formElementEdit.addEventListener('submit', formSubmitHandlerProfile);
 popupOpenButton.addEventListener('click', openPopupEditProfile);
