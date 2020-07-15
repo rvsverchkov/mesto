@@ -22,6 +22,7 @@ const closePopup = function() { //Создал отдельную функцию
     const focusPopup = document.querySelector('.popup_opened');
     popupToggle(focusPopup);
     removeCloseOnEsc(); //Вместо условной конструкции добавил удаление уже в саму функцию закрытия popup'а
+    deleteErrors(items);
 };
 
 const addCloseOnEsc = function() { //Создал функцию по добавлению обработки нажатия ESC и закрытия popup'а
@@ -101,16 +102,15 @@ const createCard = function(name, link) {
     card.querySelector('.card__like').addEventListener('click', likeToggle);
     card.querySelector('.card__trash').addEventListener('click', deleteCard);
     cardPicture.addEventListener('click', previewCard); //Заменил поиск нужной картинки на переменную cardPicture
-    //elements.prepend(card);
     addCardIn(card);
 };
 
 formElementEdit.addEventListener('submit', formSubmitHandlerProfile);
 popupOpenButton.addEventListener('click', openPopupEditProfile);
-popupCloseEditButton.addEventListener('click', openPopupEditProfile);
+popupCloseEditButton.addEventListener('click', closePopup);
 formElementAdd.addEventListener('submit', formSubmitHandlerCard);
 addCardButton.addEventListener('click', openPopupCreateCard);
-popupCloseAddButton.addEventListener('click', openPopupCreateCard);
+popupCloseAddButton.addEventListener('click', closePopup);
 previewCloseButton.addEventListener('click', previewCard);
 
 initialCards.forEach(function(element) {
@@ -122,7 +122,7 @@ popups.forEach(function(element) {
         if (evt.target !== evt.currentTarget) {
             return
         } else {
-            element.classList.remove('popup_opened');
+            closePopup();
         }
     });
 });
