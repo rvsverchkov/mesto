@@ -16,28 +16,32 @@ const linkInput = document.querySelector('.popup__input_type_link');
 const cardTemplate = document.querySelector('#card').content;
 const elements = document.querySelector('.elements');
 const previewCloseButton = document.querySelector('.popup__close-preview');
-const saveButtons = document.querySelectorAll('.popup__save');
+const buttons = Array.from(document.querySelectorAll('.popup__save'));
 
 const closePopup = function() { //Создал отдельную функцию для закрытия popup'а, поскольку в изначальном коде не получалось это реализовать
     const focusPopup = document.querySelector('.popup_opened');
     popupToggle(focusPopup);
     removeCloseOnEsc(); //Вместо условной конструкции добавил удаление уже в саму функцию закрытия popup'а
     deleteErrors(items);
+    buttons.forEach((button) => {
+        button.classList.remove(items.inactiveButtonClass);
+        button.removeAttribute('disabled', true);
+    });
 };
 
-const addCloseOnEsc = function() { //Создал функцию по добавлению обработки нажатия ESC и закрытия popup'а
+const escapePressedHandler = function(event) { //Создал функцию по добавлению обработки нажатия ESC и закрытия popup'а
     if (event.key === 'Escape') {
         closePopup();
     }
 };
 
 const removeCloseOnEsc = function() { //Создал функцию удаления обработки нажатия ESC
-    document.removeEventListener('keydown', addCloseOnEsc);
+    document.removeEventListener('keydown', escapePressedHandler);
 };
 
 const openPopupEditProfile = function() { //Изменил название на более понятное и отражающее функционал
     popupToggle(popupEdit); //Заменил дублировавщийся код на функцию popupToggle()
-    document.addEventListener('keydown', addCloseOnEsc); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
+    document.addEventListener('keydown', escapePressedHandler); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
     if (popupEdit.classList.contains('popup_opened')) {
         nameInput.value = name.textContent;
         jobInput.value = job.textContent;
@@ -48,10 +52,14 @@ const openPopupEditProfile = function() { //Изменил название на
 
 const openPopupCreateCard = function() { //Изменил название на более понятное и отражающее функционал
     popupToggle(popupCreate); //Заменил дублировавщийся код на функцию popupToggle()
-    document.addEventListener('keydown', addCloseOnEsc); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
+    document.addEventListener('keydown', escapePressedHandler); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
     if (popupCreate.classList.contains('popup_opened')) {
         placeInput.value = '';
         linkInput.value = '';
+        buttons.forEach((button) => {
+            button.classList.add(items.inactiveButtonClass);
+            button.setAttribute('disabled', true);
+        });
     }
 };
 
@@ -64,7 +72,7 @@ const formSubmitHandlerProfile = function(evt) {
 
 const formSubmitHandlerCard = function(evt) {
     evt.preventDefault();
-    createCard( placeInput.value, linkInput.value);
+    addCardIn(createCard(placeInput.value, linkInput.value)); //Изменил вызов функции в связи с изменением логики работы createCard 
     openPopupCreateCard();
 }; //Добавил во всем файле отсутствующие точки с запятой
 
@@ -86,7 +94,7 @@ const previewCard = function(evt) {
     previewPopup.classList.toggle('popup_opened');
     previewPopup.querySelector('.popup__picture').src = evt.target.src;
     previewPopup.querySelector('.popup__description').textContent = evt.target.alt;
-    document.addEventListener('keydown', addCloseOnEsc); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
+    document.addEventListener('keydown', escapePressedHandler); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
 };
 
 const addCardIn = (item) => { //Вынес добавление карточки в DOM в отдельную функцию
@@ -102,7 +110,7 @@ const createCard = function(name, link) {
     card.querySelector('.card__like').addEventListener('click', likeToggle);
     card.querySelector('.card__trash').addEventListener('click', deleteCard);
     cardPicture.addEventListener('click', previewCard); //Заменил поиск нужной картинки на переменную cardPicture
-    addCardIn(card);
+    return card;
 };
 
 formElementEdit.addEventListener('submit', formSubmitHandlerProfile);
@@ -114,7 +122,7 @@ popupCloseAddButton.addEventListener('click', closePopup);
 previewCloseButton.addEventListener('click', previewCard);
 
 initialCards.forEach(function(element) {
-    createCard(element.name, element.link);
+    addCardIn(createCard(element.name, element.link)); //Изменил функцию с createCard на addCardIn()
 });
 
 popups.forEach(function(element) {

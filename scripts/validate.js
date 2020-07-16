@@ -44,7 +44,6 @@ const hasInvalidInput = (inputList) => { //Добавил проверку на 
 
 const setEventListeners = (formElement, items) => {    //Перебор массива полей ввода с установкой слушателей
     const inputList = Array.from(formElement.querySelectorAll(items.inputSelector));
-    const buttons = Array.from(document.querySelectorAll(items.submitButtonSelector));
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', function() {
             checkInputValidity(formElement, inputElement, items);
