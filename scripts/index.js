@@ -1,3 +1,15 @@
+import {Card} from './Card.js';
+import {FormValidator} from './FormValidator.js';
+
+const items = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__save',
+    inactiveButtonClass: 'popup__save_type_disabled',
+    inputErrorClass: '.popup__input-error',
+    inputTypeError: '.popup__input_type_error'
+};
+
 const popups = Array.from(document.querySelectorAll('.popup'));
 const popupEdit = document.querySelector('.popup_edit-profile');
 const popupCreate = document.querySelector('.popup_create-card');
@@ -13,16 +25,18 @@ const nameInput = document.querySelector('.popup__input_type_name');
 const jobInput = document.querySelector('.popup__input_type_job');
 const placeInput = document.querySelector('.popup__input_type_place');
 const linkInput = document.querySelector('.popup__input_type_link');
-const cardTemplate = document.querySelector('#card').content;
 const elements = document.querySelector('.elements');
-const previewCloseButton = document.querySelector('.popup__close-preview');
 const buttons = Array.from(document.querySelectorAll('.popup__save'));
+const editForm = document.querySelector('.popup__form-edit');
+const addForm = document.querySelector('.popup__form-add');
 
-const closePopup = function() { //Создал отдельную функцию для закрытия popup'а, поскольку в изначальном коде не получалось это реализовать
+const editPopupValidation = new FormValidator(items, editForm);
+const createPopupValidation = new FormValidator(items, addForm);
+
+export const closePopup = function() { //Создал отдельную функцию для закрытия popup'а, поскольку в изначальном коде не получалось это реализовать
     const focusPopup = document.querySelector('.popup_opened');
     popupToggle(focusPopup);
     removeCloseOnEsc(); //Вместо условной конструкции добавил удаление уже в саму функцию закрытия popup'а
-    deleteErrors(items);
     buttons.forEach((button) => {
         button.classList.remove(items.inactiveButtonClass);
         button.removeAttribute('disabled', true);
@@ -72,45 +86,14 @@ const formSubmitHandlerProfile = function(evt) {
 
 const formSubmitHandlerCard = function(evt) {
     evt.preventDefault();
-    addCardIn(createCard(placeInput.value, linkInput.value)); //Изменил вызов функции в связи с изменением логики работы createCard 
+    const card = new Card(placeInput.value, linkInput.value)
+    const cardElement = card.generateCard();
+    elements.prepend(cardElement);
     openPopupCreateCard();
 }; //Добавил во всем файле отсутствующие точки с запятой
 
 const popupToggle = function(popup) {   //Вынес открытие popup'ов в отдельную функцию, чтобы не было дублирования кода
     popup.classList.toggle('popup_opened');
-};
-
-const likeToggle = function(evt) {
-    evt.target.classList.toggle('card__like_active');
-};
-
-const deleteCard = function(evt) {
-    const currentCard = evt.target.closest('.card');
-    currentCard.remove();
-};
-
-const previewCard = function(evt) {
-    const previewPopup = document.querySelector('.popup_preview');
-    previewPopup.classList.toggle('popup_opened');
-    previewPopup.querySelector('.popup__picture').src = evt.target.src;
-    previewPopup.querySelector('.popup__description').textContent = evt.target.alt;
-    document.addEventListener('keydown', escapePressedHandler); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
-};
-
-const addCardIn = (item) => { //Вынес добавление карточки в DOM в отдельную функцию
-    elements.prepend(item);
-};
-
-const createCard = function(name, link) {
-    const card = cardTemplate.cloneNode(true);
-    const cardPicture = card.querySelector('.card__picture'); //Вынес поиск cardPicture в отдельную переменную, чтобы не было дублирования кода
-    cardPicture.src = link; //Заменил поиск нужной картинки на переменную cardPicture
-    cardPicture.alt = name; //Заменил поиск нужной картинки на переменную cardPicture
-    card.querySelector('.card__text').textContent = name;
-    card.querySelector('.card__like').addEventListener('click', likeToggle);
-    card.querySelector('.card__trash').addEventListener('click', deleteCard);
-    cardPicture.addEventListener('click', previewCard); //Заменил поиск нужной картинки на переменную cardPicture
-    return card;
 };
 
 formElementEdit.addEventListener('submit', formSubmitHandlerProfile);
@@ -119,10 +102,11 @@ popupCloseEditButton.addEventListener('click', closePopup);
 formElementAdd.addEventListener('submit', formSubmitHandlerCard);
 addCardButton.addEventListener('click', openPopupCreateCard);
 popupCloseAddButton.addEventListener('click', closePopup);
-previewCloseButton.addEventListener('click', previewCard);
 
-initialCards.forEach(function(element) {
-    addCardIn(createCard(element.name, element.link)); //Изменил функцию с createCard на addCardIn()
+initialCards.forEach((element) => { //FIXED
+    const card = new Card(element.name, element.link, '#card');
+    const cardElement = card.generateCard();
+    elements.prepend(cardElement);
 });
 
 popups.forEach(function(element) {
@@ -134,3 +118,6 @@ popups.forEach(function(element) {
         }
     });
 });
+
+editPopupValidation._enableValidation();
+createPopupValidation._enableValidation();
