@@ -1,4 +1,4 @@
-const initialCards = [  //Убрал export и import, чтобы при открытии файла не через сервер все корректно отображалось
+const initialCards = [
     {
         name: 'Амстердам',
         link: './images/amsterdam.jpg'

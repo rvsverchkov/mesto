@@ -86,13 +86,14 @@ const formSubmitHandlerProfile = function(evt) {
 
 const formSubmitHandlerCard = function(evt) {
     evt.preventDefault();
-    const card = new Card(placeInput.value, linkInput.value)
+    console.log('123');
+    const card = new Card(placeInput.value, linkInput.value, '#card');
     const cardElement = card.generateCard();
     elements.prepend(cardElement);
     openPopupCreateCard();
-}; //Добавил во всем файле отсутствующие точки с запятой
+};
 
-const popupToggle = function(popup) {   //Вынес открытие popup'ов в отдельную функцию, чтобы не было дублирования кода
+const popupToggle = function(popup) { 
     popup.classList.toggle('popup_opened');
 };
 
@@ -119,5 +120,5 @@ popups.forEach(function(element) {
     });
 });
 
-editPopupValidation._enableValidation();
-createPopupValidation._enableValidation();
+editPopupValidation.enableValidation();
+createPopupValidation.enableValidation();

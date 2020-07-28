@@ -1,5 +1,3 @@
-import {closePopup} from './index.js';
-
 export class Card {
     constructor(name, link, selector) {
         this._link = link;
@@ -8,10 +6,7 @@ export class Card {
     };
 
     _getTemplate() {
-        const cardItem = document
-        .querySelector(this._template)
-        .content
-        .cloneNode(true);
+        const cardItem = document.querySelector(this._template).content.cloneNode(true);
         return cardItem;
     };
 
