@@ -41,6 +41,8 @@ export const closePopup = function() { //Создал отдельную фун�
         button.classList.remove(items.inactiveButtonClass);
         button.removeAttribute('disabled', true);
     });
+    editPopupValidation._hideInputError();
+    createPopupValidation._hideInputError();
 };
 
 const escapePressedHandler = function(event) { //Создал функцию по добавлению обработки нажатия ESC и закрытия popup'а
