@@ -1,5 +1,5 @@
-export class FormValidator {
-    constructor(items, form) {
+export class FormValidator { //Экспорт класса в index.js
+    constructor(items, form) { //Конструктор с селекторами, находящимися в объекте items
         this._form = form;
         this._formSelector = items.formSelector;
         this._inputSelector = items.inputSelector;
@@ -7,20 +7,19 @@ export class FormValidator {
         this._inactiveButtonClass = items.inactiveButtonClass;
         this._inputErrorClass = items.inputErrorClass;
         this._inputTypeError = items.inputTypeError;
-        this._buttonList = Array.from(this._form.querySelectorAll(this._submitButtonSelector));
     };
 
-    _setEventListeners() {
-        this._inputList = Array.from(this._form.querySelectorAll(this._inputSelector));
-        this._inputList.forEach((item) => {
-            item.addEventListener('input', () => {
-                this._checkInputValidity(item);
-                this._toggleSubmitButton();
+    _setEventListeners() { //Установка слушателей на все задействованные поля ввода
+        this._inputList = Array.from(this._form.querySelectorAll(this._inputSelector)); //Массив всех полей ввода
+        this._inputList.forEach((item) => { //Преборка массива полей ввода
+            item.addEventListener('input', () => { //Установка слушателя на событие 'input'
+                this._checkInputValidity(item); //Проверка валидности ввода на item
+                this._toggleSubmitButton(); //Преключение состояние кнопки ввода формы
             });
         });
     };
 
-    _checkInputValidity(inputElement) {
+    _checkInputValidity(inputElement) { //Проверка валидности вводимых данных
         this._inputElement = inputElement;
         this._errorItem = this._form.querySelector(`#${this._inputElement.id}-error`);
         if (!inputElement.validity.valid) {
@@ -30,40 +29,40 @@ export class FormValidator {
         };
     };
 
-    _toggleSubmitButton() {
-        this._buttonList = Array.from(this._form.querySelectorAll(this._submitButtonSelector));
-        if (this._checkInvalidInput()) {
-            this._buttonList.forEach((button) => {
-                button.classList.add(this._inactiveButtonClass);
-                button.setAttribute('disabled', true);
+    _toggleSubmitButton() { //Переключение состояние кнопки отправки формы
+        this._buttonList = Array.from(this._form.querySelectorAll(this._submitButtonSelector)); //Создание массива всех кнопок для отправки формы
+        if (this._checkInvalidInput()) { //Проверка на невалидность вводимых данных
+            this._buttonList.forEach((button) => { //Переборка массива кнопок
+                button.classList.add(this._inactiveButtonClass); //Добавление соответствующего класса каждой из кнопок
+                button.setAttribute('disabled', true); //Деактивация кнопки
             });
         } else {
-            this._buttonList.forEach((button) => {
-                button.classList.remove(this._inactiveButtonClass);
-                button.removeAttribute('disabled', true);
+            this._buttonList.forEach((button) => { //Аналогичная переборка массива кнопок
+                button.classList.remove(this._inactiveButtonClass); //Удаление класса неактивной кнопки
+                button.removeAttribute('disabled', true); //Удаление атрибута с деактивацией
             });
         }
     }
 
-    _showInputError() {
+    _showInputError() { //Показ сообщения об ошибке
         this._errorItem.textContent = this._inputElement.validationMessage;
         this._inputElement.classList.add(this._inputErrorClass);
         this._inputElement.classList.add(this._inputTypeError);
     }
 
-    _hideInputError() {
+    _hideInputError() { //Скрытие сообщения об ошибке
         this._errorItem.textContent = '';
         this._inputElement.classList.remove(this._inputErrorClass);
         this._inputElement.classList.remove(this._inputTypeError);
     }
 
-    _checkInvalidInput() {
+    _checkInvalidInput() { //Проверка на невалидность вводимых данных
         return this._inputList.some((element) => {
             return !element.validity.valid;
         });
     }
 
-    enableValidation() {
+    enableValidation() { //Активация валидации
         this._setEventListeners();
     }
 }

@@ -1,7 +1,7 @@
-import {Card} from './Card.js';
-import {FormValidator} from './FormValidator.js';
+import {Card} from './Card.js'; //Импорт класса Card
+import {FormValidator} from './FormValidator.js'; //Импорт класса FormValidator
 
-const items = {
+const items = { //Вынес объект с селекторами для валидации в основной файл
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__save',
@@ -30,8 +30,8 @@ const buttons = Array.from(document.querySelectorAll('.popup__save'));
 const editForm = document.querySelector('.popup__form-edit');
 const addForm = document.querySelector('.popup__form-add');
 
-const editPopupValidation = new FormValidator(items, editForm);
-const createPopupValidation = new FormValidator(items, addForm);
+const editPopupValidation = new FormValidator(items, editForm); //Создал экземпляр класса FormValidator
+const createPopupValidation = new FormValidator(items, addForm); //Создал экземпляр класса FormValidator
 
 export const closePopup = function() { //Создал отдельную функцию для закрытия popup'а, поскольку в изначальном коде не получалось это реализовать
     const focusPopup = document.querySelector('.popup_opened');
@@ -66,36 +66,35 @@ const openPopupEditProfile = function() { //Изменил название на
     }
 };
 
-const openPopupCreateCard = function() { //Изменил название на более понятное и отражающее функционал
-    popupToggle(popupCreate); //Заменил дублировавщийся код на функцию popupToggle()
-    document.addEventListener('keydown', escapePressedHandler); //Переместил слушатель нажатия ESC в каждый popup, при его открытии
-    if (popupCreate.classList.contains('popup_opened')) {
+const openPopupCreateCard = function() { //Открытие popup'а для создания карточки
+    popupToggle(popupCreate);
+    document.addEventListener('keydown', escapePressedHandler); //Добавление слушателя на нажатие клавиши
+    if (popupCreate.classList.contains('popup_opened')) { //Проверка на то, открыт ли popup
         placeInput.value = '';
         linkInput.value = '';
-        buttons.forEach((button) => {
-            button.classList.add(items.inactiveButtonClass);
+        buttons.forEach((button) => { //Если же popup открыт, то массив кнопок перебирается и деактивирует их
+            button.classList.add(items.inactiveButtonClass); //И добавляет класс неактивной кнопки
             button.setAttribute('disabled', true);
         });
     }
 };
 
-const formSubmitHandlerProfile = function(evt) {
+const formSubmitHandlerProfile = function(evt) { //Функция изменения информации в профиле пользователя
     evt.preventDefault();
     name.textContent = nameInput.value;
     job.textContent = jobInput.value;
     openPopupEditProfile();
 };
 
-const formSubmitHandlerCard = function(evt) {
+const formSubmitHandlerCard = function(evt) { //Функция создания карточки при нажатии на кнопку отправки формы
     evt.preventDefault();
-    console.log('123');
-    const card = new Card(placeInput.value, linkInput.value, '#card');
-    const cardElement = card.generateCard();
-    elements.prepend(cardElement);
+    const card = new Card(placeInput.value, linkInput.value, '#card'); //Создание экземпляра класса Card
+    const cardElement = card.generateCard(); //Применение метода для создания новой карточки
+    elements.prepend(cardElement); //Вставка готовой карточки в elements
     openPopupCreateCard();
 };
 
-const popupToggle = function(popup) { 
+const popupToggle = function(popup) { //Переключение состояния popup'а
     popup.classList.toggle('popup_opened');
 };
 
@@ -107,8 +106,8 @@ addCardButton.addEventListener('click', openPopupCreateCard);
 popupCloseAddButton.addEventListener('click', closePopup);
 
 initialCards.forEach((element) => { //FIXED
-    const card = new Card(element.name, element.link, '#card');
-    const cardElement = card.generateCard();
+    const card = new Card(element.name, element.link, '#card'); //Также создал экземпляр класса Card
+    const cardElement = card.generateCard(); //Применил метод для создания новой карточки
     elements.prepend(cardElement);
 });
 
@@ -122,5 +121,5 @@ popups.forEach(function(element) {
     });
 });
 
-editPopupValidation.enableValidation();
-createPopupValidation.enableValidation();
+editPopupValidation.enableValidation(); //Активировал валидацию формы
+createPopupValidation.enableValidation(); //Активировал валидацию формы

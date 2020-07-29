@@ -1,4 +1,4 @@
-const initialCards = [
+const initialCards = [ //Изначальный массив карточек
     {
         name: 'Амстердам',
         link: './images/amsterdam.jpg'
