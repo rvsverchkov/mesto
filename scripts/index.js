@@ -41,8 +41,8 @@ const closePopup = function() { //FIX:Убрал лишний export
         button.classList.remove(validationConfig.inactiveButtonClass);
         button.removeAttribute('disabled', true);
     });
-    editPopupValidation.hideInputError(); //FIX:Сделал метод публичным
-    createPopupValidation.hideInputError(); //FIX:Сделал метод публичным
+    editPopupValidation.hideInputErrors(); //FIX:Сделал метод публичным
+    createPopupValidation.hideInputErrors(); //FIX:Сделал метод публичным
 };
 
 const escapePressedHandler = function(event) { //Создал функцию по добавлению обработки нажатия ESC и закрытия popup'а
@@ -73,7 +73,7 @@ const openPopupCreateCard = function() { //Открытие popup'а для со
         placeInput.value = '';
         linkInput.value = '';
         buttons.forEach((button) => { //Если же popup открыт, то массив кнопок перебирается и деактивирует их
-            button.classList.add(items.inactiveButtonClass); //И добавляет класс неактивной кнопки
+            button.classList.add(validationConfig.inactiveButtonClass); //И добавляет класс неактивной кнопки
             button.setAttribute('disabled', true);
         });
     }

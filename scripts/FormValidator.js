@@ -25,7 +25,7 @@ export class FormValidator { //Экспорт класса в index.js
         if (!inputElement.validity.valid) {
             this._showInputError();
         } else {
-            this.hideInputError();
+            this._hideInputError();
         };
     };
 
@@ -50,10 +50,17 @@ export class FormValidator { //Экспорт класса в index.js
         this._inputElement.classList.add(this._inputTypeError);
     };
 
-    hideInputError() { //Скрытие сообщения об ошибке //FIX:Сделал метод публичным
+    _hideInputError() { //Скрытие сообщения об ошибке
         this._errorItem.textContent = '';
         this._inputElement.classList.remove(this._inputErrorClass);
         this._inputElement.classList.remove(this._inputTypeError);
+    };
+
+    hideInputErrors() { //FIX:Вынес удаление всех ошибок в отдельный метод и сделал его публичным
+        const errorItems = Array.from(this._form.querySelectorAll(this._inputErrorClass));
+        errorItems.forEach((error) => {
+            error.textContent = '';
+        });
     };
 
     _checkInvalidInput() { //Проверка на невалидность вводимых данных

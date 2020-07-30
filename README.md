@@ -14,6 +14,6 @@
 * Grid Layout
 * Flexbox
 * CSS
-* JavaScript
+* JavaScript с ООП
 ****
 Ссылка на сайт - https://rvsverchkov.github.io/mesto/index.html

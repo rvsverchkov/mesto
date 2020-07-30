@@ -12,7 +12,7 @@ export class Card { //Экспорт класса Card в index.js
 
     generateCard() { //Создание самой карточки на основе этого шаблона
         this._element = this._getTemplate();
-        this._picture = this._element.querySelector('.card__picture'); //FIX:Добавил переменную _picture, чтобы не было дублирования
+        this._picture = this._element.querySelector('.card__picture'); //FIX:Добавил _picture, чтобы не было дублирования
         this._picture.src = this._link; //FIX:Применил _picture
         this._element.querySelector('.card__text').textContent = this._name;
         this._picture.alt = this._name; //FIX:Применил _picture
