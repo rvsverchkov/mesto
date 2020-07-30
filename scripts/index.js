@@ -1,7 +1,7 @@
 import {Card} from './Card.js'; //Импорт класса Card
 import {FormValidator} from './FormValidator.js'; //Импорт класса FormValidator
 
-const items = { //Вынес объект с селекторами для валидации в основной файл
+const validationConfig = { //FIX:Преименовал объект в validationConfig
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__save',
@@ -30,19 +30,19 @@ const buttons = Array.from(document.querySelectorAll('.popup__save'));
 const editForm = document.querySelector('.popup__form-edit');
 const addForm = document.querySelector('.popup__form-add');
 
-const editPopupValidation = new FormValidator(items, editForm); //Создал экземпляр класса FormValidator
-const createPopupValidation = new FormValidator(items, addForm); //Создал экземпляр класса FormValidator
+const editPopupValidation = new FormValidator(validationConfig, editForm); //Создал экземпляр класса FormValidator
+const createPopupValidation = new FormValidator(validationConfig, addForm); //Создал экземпляр класса FormValidator
 
-export const closePopup = function() { //Создал отдельную функцию для закрытия popup'а, поскольку в изначальном коде не получалось это реализовать
+const closePopup = function() { //FIX:Убрал лишний export
     const focusPopup = document.querySelector('.popup_opened');
     popupToggle(focusPopup);
     removeCloseOnEsc(); //Вместо условной конструкции добавил удаление уже в саму функцию закрытия popup'а
     buttons.forEach((button) => {
-        button.classList.remove(items.inactiveButtonClass);
+        button.classList.remove(validationConfig.inactiveButtonClass);
         button.removeAttribute('disabled', true);
     });
-    editPopupValidation._hideInputError();
-    createPopupValidation._hideInputError();
+    editPopupValidation.hideInputError(); //FIX:Сделал метод публичным
+    createPopupValidation.hideInputError(); //FIX:Сделал метод публичным
 };
 
 const escapePressedHandler = function(event) { //Создал функцию по добавлению обработки нажатия ESC и закрытия popup'а
@@ -106,9 +106,8 @@ addCardButton.addEventListener('click', openPopupCreateCard);
 popupCloseAddButton.addEventListener('click', closePopup);
 
 initialCards.forEach((element) => { //FIXED
-    const card = new Card(element.name, element.link, '#card'); //Также создал экземпляр класса Card
-    const cardElement = card.generateCard(); //Применил метод для создания новой карточки
-    elements.prepend(cardElement);
+    const card = new Card(element.name, element.link, '#card').generateCard(); //FIX:Переписал вызов так, чтобы не было необходимости в лишней переменной
+    elements.prepend(card);
 });
 
 popups.forEach(function(element) {
@@ -116,7 +115,11 @@ popups.forEach(function(element) {
         if (evt.target !== evt.currentTarget) {
             return
         } else {
-            closePopup();
+            if (element.classList.contains('popup_preview')) {
+                popupToggle(element);
+            } else {
+                closePopup();
+            }
         }
     });
 });

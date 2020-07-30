@@ -25,7 +25,7 @@ export class FormValidator { //Экспорт класса в index.js
         if (!inputElement.validity.valid) {
             this._showInputError();
         } else {
-            this._hideInputError();
+            this.hideInputError();
         };
     };
 
@@ -42,27 +42,27 @@ export class FormValidator { //Экспорт класса в index.js
                 button.removeAttribute('disabled', true); //Удаление атрибута с деактивацией
             });
         }
-    }
+    };
 
     _showInputError() { //Показ сообщения об ошибке
         this._errorItem.textContent = this._inputElement.validationMessage;
         this._inputElement.classList.add(this._inputErrorClass);
         this._inputElement.classList.add(this._inputTypeError);
-    }
+    };
 
-    _hideInputError() { //Скрытие сообщения об ошибке
+    hideInputError() { //Скрытие сообщения об ошибке //FIX:Сделал метод публичным
         this._errorItem.textContent = '';
         this._inputElement.classList.remove(this._inputErrorClass);
         this._inputElement.classList.remove(this._inputTypeError);
-    }
+    };
 
     _checkInvalidInput() { //Проверка на невалидность вводимых данных
         return this._inputList.some((element) => {
             return !element.validity.valid;
         });
-    }
+    };
 
     enableValidation() { //Активация валидации
         this._setEventListeners();
-    }
+    };
 }

@@ -11,10 +11,11 @@ export class Card { //Экспорт класса Card в index.js
     };
 
     generateCard() { //Создание самой карточки на основе этого шаблона
-        this._element = this._getTemplate(); 
-        this._element.querySelector('.card__picture').src = this._link;
+        this._element = this._getTemplate();
+        this._picture = this._element.querySelector('.card__picture'); //FIX:Добавил переменную _picture, чтобы не было дублирования
+        this._picture.src = this._link; //FIX:Применил _picture
         this._element.querySelector('.card__text').textContent = this._name;
-        this._element.querySelector('.card__picture').alt = this._name;
+        this._picture.alt = this._name; //FIX:Применил _picture
         this._likeButton = this._element.querySelector('.card__like');
         this._deleteButton = this._element.querySelector('.card__trash');
         this._imageButton = this._element.querySelector('.card__picture');
@@ -24,7 +25,19 @@ export class Card { //Экспорт класса Card в index.js
         return this._element; //Возвращение готовой карточки
     };
 
-    _setEventListeners() { //Установка слушателей событий
+    _addCloseOnEsc(event) { //FIX:Добавил функцию обработки нажатия по ESC
+        if (event.key === 'Escape' && this._previewPopup.classList.contains('popup_opened')) {
+            this._previewPopup.classList.remove('popup_opened');
+        }
+    }
+
+    _removeCloseOnEsc() {
+        document.removeEventListener('keydown', (event) => {
+            this._addCloseOnEsc(event);
+        });
+    }
+
+    _setEventListeners() { //Установка слушателей событий //FIX:Вынес закрытие картинки в отдельную функцию
         this._likeButton.addEventListener('click', () => { //Слушатель на кнопку like
             this._handleToggleLike(event); //Переключение состояние нажатой кнопки
         });
@@ -35,8 +48,12 @@ export class Card { //Экспорт класса Card в index.js
             this._handlePreviewCard(event); //Увеличение нажатой картинки
         });
         this._closeButton.addEventListener('click', () => { //Слушатель на кнопку закрытия открытой картинки
-            this._previewPopup.classList.remove('popup_opened'); //Удаление класса popup_opened у открытой картинки
+            this._handleClosePreview(); //Удаление класса popup_opened у открытой картинки
         });
+    };
+
+    _handleClosePreview() {
+        this._previewPopup.classList.remove('popup_opened');
     };
 
     _handleToggleLike(event) { //Преключение состояния кнопки like при нажатии
@@ -53,9 +70,8 @@ export class Card { //Экспорт класса Card в index.js
         this._previewPopup.querySelector('.popup__picture').src = event.target.src;
         this._previewPopup.querySelector('.popup__description').textContent = event.target.alt;
         this._closeButton = this._previewPopup.querySelector('.popup__close-preview');
+        document.addEventListener('keydown', (event) => { //FIX:Добавил слушатель по нажатию на ESC
+            this._addCloseOnEsc(event);
+        });
     };
-
-    _handleCloseCard(event) { //Закрытие уже открытой карточки
-        event.target.classList.remove('popup_opened');
-    }
 };
