@@ -56,7 +56,7 @@ export class FormValidator { //Экспорт класса в index.js
         this._inputElement.classList.remove(this._inputTypeError);
     };
 
-    hideInputErrors() { //FIX:Вынес удаление всех ошибок в отдельный метод и сделал его публичным
+    hideInputErrors() { //Скрытие всех сообщение об ошибках
         const errorItems = Array.from(this._form.querySelectorAll(this._inputErrorClass));
         errorItems.forEach((error) => {
             error.textContent = '';

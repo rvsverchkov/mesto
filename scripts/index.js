@@ -1,7 +1,7 @@
 import {Card} from './Card.js'; //Импорт класса Card
 import {FormValidator} from './FormValidator.js'; //Импорт класса FormValidator
 
-const validationConfig = { //FIX:Преименовал объект в validationConfig
+const validationConfig = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__save',
@@ -30,10 +30,10 @@ const buttons = Array.from(document.querySelectorAll('.popup__save'));
 const editForm = document.querySelector('.popup__form-edit');
 const addForm = document.querySelector('.popup__form-add');
 
-const editPopupValidation = new FormValidator(validationConfig, editForm); //Создал экземпляр класса FormValidator
-const createPopupValidation = new FormValidator(validationConfig, addForm); //Создал экземпляр класса FormValidator
+const editPopupValidation = new FormValidator(validationConfig, editForm); //Экземпляр класса FormValidator
+const createPopupValidation = new FormValidator(validationConfig, addForm); //Экземпляр класса FormValidator
 
-const closePopup = function() { //FIX:Убрал лишний export
+const closePopup = function() {
     const focusPopup = document.querySelector('.popup_opened');
     popupToggle(focusPopup);
     removeCloseOnEsc(); //Вместо условной конструкции добавил удаление уже в саму функцию закрытия popup'а
@@ -41,8 +41,8 @@ const closePopup = function() { //FIX:Убрал лишний export
         button.classList.remove(validationConfig.inactiveButtonClass);
         button.removeAttribute('disabled', true);
     });
-    editPopupValidation.hideInputErrors(); //FIX:Сделал метод публичным
-    createPopupValidation.hideInputErrors(); //FIX:Сделал метод публичным
+    editPopupValidation.hideInputErrors();
+    createPopupValidation.hideInputErrors(); 
 };
 
 const escapePressedHandler = function(event) { //Создал функцию по добавлению обработки нажатия ESC и закрытия popup'а
@@ -106,7 +106,7 @@ addCardButton.addEventListener('click', openPopupCreateCard);
 popupCloseAddButton.addEventListener('click', closePopup);
 
 initialCards.forEach((element) => { //FIXED
-    const card = new Card(element.name, element.link, '#card').generateCard(); //FIX:Переписал вызов так, чтобы не было необходимости в лишней переменной
+    const card = new Card(element.name, element.link, '#card').generateCard();
     elements.prepend(card);
 });
 
@@ -124,5 +124,5 @@ popups.forEach(function(element) {
     });
 });
 
-editPopupValidation.enableValidation(); //Активировал валидацию формы
-createPopupValidation.enableValidation(); //Активировал валидацию формы
+editPopupValidation.enableValidation(); //Активировация валидации формы
+createPopupValidation.enableValidation(); //Активировация валидации формы

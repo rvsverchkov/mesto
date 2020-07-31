@@ -12,13 +12,12 @@ export class Card { //Экспорт класса Card в index.js
 
     generateCard() { //Создание самой карточки на основе этого шаблона
         this._element = this._getTemplate();
-        this._picture = this._element.querySelector('.card__picture'); //FIX:Добавил _picture, чтобы не было дублирования
-        this._picture.src = this._link; //FIX:Применил _picture
+        this._picture = this._element.querySelector('.card__picture');
+        this._picture.src = this._link;
         this._element.querySelector('.card__text').textContent = this._name;
-        this._picture.alt = this._name; //FIX:Применил _picture
+        this._picture.alt = this._name;
         this._likeButton = this._element.querySelector('.card__like');
         this._deleteButton = this._element.querySelector('.card__trash');
-        this._imageButton = this._element.querySelector('.card__picture');
         this._previewPopup = document.querySelector('.popup_preview');
         this._closeButton = this._previewPopup.querySelector('.popup__close');
         this._setEventListeners(); //Установка слушателей событий
@@ -37,14 +36,14 @@ export class Card { //Экспорт класса Card в index.js
         });
     }
 
-    _setEventListeners() { //Установка слушателей событий //FIX:Вынес закрытие картинки в отдельную функцию
+    _setEventListeners() { //Установка слушателей событий
         this._likeButton.addEventListener('click', () => { //Слушатель на кнопку like
             this._handleToggleLike(event); //Переключение состояние нажатой кнопки
         });
         this._deleteButton.addEventListener('click', () => { //Слушатель на кнопку delete
             this._handleRemoveCard(event); //Удаление карточки, на которую нажали
         });
-        this._imageButton.addEventListener('click', () => { //Слушатель на картинку
+        this._picture.addEventListener('click', () => { //Слушатель на картинку
             this._handlePreviewCard(event); //Увеличение нажатой картинки
         });
         this._closeButton.addEventListener('click', () => { //Слушатель на кнопку закрытия открытой картинки
