@@ -1,5 +1,5 @@
-import {Card} from './Card.js'; //Импорт класса Card
-import {FormValidator} from './FormValidator.js'; //Импорт класса FormValidator
+import {Card} from '../components/Card.js'; //Импорт класса Card
+import {FormValidator} from '../components/FormValidator.js'; //Импорт класса FormValidator
 
 const validationConfig = {
     formSelector: '.popup__form',
