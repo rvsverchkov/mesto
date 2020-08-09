@@ -1,3 +1,4 @@
+import Section from '../components/Section.js';
 import {Card} from '../components/Card.js'; //Импорт класса Card
 import {FormValidator} from '../components/FormValidator.js'; //Импорт класса FormValidator
 
@@ -105,10 +106,22 @@ formElementAdd.addEventListener('submit', formSubmitHandlerCard);
 addCardButton.addEventListener('click', openPopupCreateCard);
 popupCloseAddButton.addEventListener('click', closePopup);
 
-initialCards.forEach((element) => { //FIXED
+/*initialCards.forEach((element) => { //FIXED
     const card = new Card(element.name, element.link, '#card').generateCard();
     elements.prepend(card);
-});
+});*/
+
+const initialCardsList = new Section({
+    items: initialCards,
+    renderer: (item) => {
+        const card = new Card(item.name, item.link, '#card').generateCard();
+        initialCardsList.setItem(card);
+        },
+    },
+    'elements'
+);
+
+initialCardsList.renderItems();
 
 popups.forEach(function(element) {
     element.addEventListener('mousedown', function(evt) {   //Закрытие popup'а по нажатию на overlay
