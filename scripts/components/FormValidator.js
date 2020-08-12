@@ -1,4 +1,4 @@
-export class FormValidator { //Экспорт класса в index.js
+export default class FormValidator { //Экспорт класса в index.js
     constructor(items, form) { //Конструктор с селекторами, находящимися в объекте items
         this._form = form;
         this._formSelector = items.formSelector;
