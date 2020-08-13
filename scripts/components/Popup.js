@@ -1,22 +1,22 @@
 export default class Popup {
-    constructor(popupSelector) {
+    constructor(popupSelector) { //Конструктор
         this._popup = document.querySelector(`.${popupSelector}`);
         this._popupCloseButton = this._popup.querySelector(`.popup__close`);
         this.setEventListeners();
     }
 
-    open() {
+    open() { //Функция открытия popup'а
         this._popup.classList.add('popup_opened');
         this._createHandleEscCloseListener();
     }
 
-    close() {
+    close() { //Функция закрытия popup'а
         this._removeHandleEscClose();
         this._popup.classList.remove('popup_opened');
         this._removeHandleEscClose();
     }
 
-    _handleOverlayClose() {
+    _handleOverlayClose() { //Функция закрытия popup'а при нажатии на Overlay
         if (event.target !== event.currentTarget) {
             return
         } else {
@@ -24,29 +24,27 @@ export default class Popup {
         }
     }
 
-    _handleEscClose() {
+    _handleEscClose() { //Функция закрытия popup'а при нажатии на ESC
         if (event.key === 'Escape') {
             this.close();
         }
     }
 
-    _createHandleEscCloseListener() {
+    _createHandleEscCloseListener() { //Добавление слушателя нажатия на ESC
         document.addEventListener('keydown', (event) => {
             this._handleEscClose(event);
         })
     }
 
-    _removeHandleEscClose() {
+    _removeHandleEscClose() { //Удаление слушателя нажатия на ESC
         document.removeEventListener('keydown', (event) => {
             this._handleEscClose(event);
         })
     }
 
-    setEventListeners() {
+    setEventListeners() { //Установка всех слушателей на popup и его элементы
         this._popupCloseButton.addEventListener('click', () => {
             this.close();
-        })
-        this._popup.addEventListener('click', () => {
         })
         this._popup.addEventListener('mousedown', () => {
             this._handleOverlayClose();

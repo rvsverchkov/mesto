@@ -1,4 +1,4 @@
-import Section from '../components/Section.js';
+import Section from '../components/Section.js'; 
 import PopupWithImage from '../components/PopupWithImage.js';
 import Card from '../components/Card.js';
 import FormValidator from '../components/FormValidator.js';
@@ -23,7 +23,7 @@ const addPopupButton = document.querySelector('.profile__add-button');
 const editPopupValidation = new FormValidator(validationConfig, editForm);
 const createPopupValidation = new FormValidator(validationConfig, addForm); 
 
-const initialCardsList = new Section({
+const initialCardsList = new Section({ //Изначальный массив созданных карточек с функцией
     items: initialCards,
     renderer: (item) => {
         const card = new Card(item.name, item.link, '#card', {
@@ -38,26 +38,26 @@ const initialCardsList = new Section({
 
 initialCardsList.renderItems();
 
-const userInfo = new UserInfo({
+const userInfo = new UserInfo({ //Экземпляр класса с информацией о пользователе
     userName: 'profile__name', 
     userData: 'profile__activity'
     }
 );
 
-const popupPreview = new PopupWithImage('popup_preview', {
+const popupPreview = new PopupWithImage('popup_preview', { //Экземпляр класса с увеличенной картинкой
     imageSelector: 'popup__picture',
     descriptionSelector: 'popup__description'
     }
 );
 
-const popupEdit = new PopupWithForm('popup_edit-profile', {
+const popupEdit = new PopupWithForm('popup_edit-profile', { //Экземпляр класса popup'а с редактированием информации в профиле
     callback: ({name, activity}) => {
             userInfo.setUserInfo({name, activity});
         }
     }
 );
 
-const popupAdd = new PopupWithForm('popup_create-card', {
+const popupAdd = new PopupWithForm('popup_create-card', { //Экземпляр класса popup'а с добавлением новой карточки в галлерею
     callback: ({place, link}) => {
             const createdCard = new Card(place, link, '#card', {
                 handleCardClick: (src, name) => {
@@ -68,7 +68,7 @@ const popupAdd = new PopupWithForm('popup_create-card', {
     }
 )
 
-editPopupButton.addEventListener('click', () => {
+editPopupButton.addEventListener('click', () => { //Добавление слушателей при открытии popup'а редактирования профиля
     popupEdit.open();
     userInfo.getUserInfo();
     editPopupValidation.hideInputErrors();
@@ -78,7 +78,7 @@ editPopupButton.addEventListener('click', () => {
     });
 });
 
-addPopupButton.addEventListener('click', () => {
+addPopupButton.addEventListener('click', () => { //Добавление слушателей при открытии popup'а добавления карточки
     popupAdd.open();
     createPopupValidation.hideInputErrors();
     buttons.forEach((button) => {
@@ -87,5 +87,5 @@ addPopupButton.addEventListener('click', () => {
     });
 })
 
-editPopupValidation.enableValidation();
-createPopupValidation.enableValidation(); 
+editPopupValidation.enableValidation(); //Активация валидации
+createPopupValidation.enableValidation(); //Активация валидации
