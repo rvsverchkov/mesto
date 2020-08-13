@@ -1,7 +1,7 @@
 import Section from '../components/Section.js';
 import PopupWithImage from '../components/PopupWithImage.js';
-import Card from '../components/Card.js'; //Импорт класса Card
-import FormValidator from '../components/FormValidator.js'; //Импорт класса FormValidator
+import Card from '../components/Card.js';
+import FormValidator from '../components/FormValidator.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 
@@ -20,13 +20,16 @@ const addForm = document.querySelector('.popup__form-add');
 const editPopupButton = document.querySelector('.profile__edit-button');
 const addPopupButton = document.querySelector('.profile__add-button');
 
-const editPopupValidation = new FormValidator(validationConfig, editForm); //Экземпляр класса FormValidator
-const createPopupValidation = new FormValidator(validationConfig, addForm); //Экземпляр класса FormValidator
+const editPopupValidation = new FormValidator(validationConfig, editForm);
+const createPopupValidation = new FormValidator(validationConfig, addForm); 
 
 const initialCardsList = new Section({
     items: initialCards,
     renderer: (item) => {
-        const card = new Card(item.name, item.link, '#card').generateCard();
+        const card = new Card(item.name, item.link, '#card', {
+            handleCardClick: (src, name) => {
+                popupPreview.open(src, name);
+            }}).generateCard();
         initialCardsList.addItem(card);
         },
     },
@@ -42,7 +45,7 @@ const userInfo = new UserInfo({
 );
 
 const popupPreview = new PopupWithImage('popup_preview', {
-    imageSelector: 'popup__image',
+    imageSelector: 'popup__picture',
     descriptionSelector: 'popup__description'
     }
 );
@@ -56,7 +59,10 @@ const popupEdit = new PopupWithForm('popup_edit-profile', {
 
 const popupAdd = new PopupWithForm('popup_create-card', {
     callback: ({place, link}) => {
-            const createdCard = new Card(place, link, '#card').generateCard();
+            const createdCard = new Card(place, link, '#card', {
+                handleCardClick: (src, name) => {
+                    popupPreview.open(src, name);
+            }}).generateCard();
             initialCardsList.addItem(createdCard);
         }
     }
@@ -81,5 +87,5 @@ addPopupButton.addEventListener('click', () => {
     });
 })
 
-editPopupValidation.enableValidation(); //Активировация валидации формы
-createPopupValidation.enableValidation(); //Активировация валидации формы
+editPopupValidation.enableValidation();
+createPopupValidation.enableValidation(); 

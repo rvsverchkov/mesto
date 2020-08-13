@@ -1,8 +1,9 @@
 export default class Card { //Экспорт класса Card в index.js
-    constructor(name, link, selector) { //Конструктор класса с вводимыми данными
+    constructor(name, link, selector, { handleCardClick }) { //Конструктор класса с вводимыми данными
         this._link = link;
         this._name = name;
         this._template = selector;
+        this._handleCardClick = handleCardClick;
     };
 
     _getTemplate() { //Взятие шаблона карточки из .document
@@ -24,18 +25,6 @@ export default class Card { //Экспорт класса Card в index.js
         return this._element; //Возвращение готовой карточки
     };
 
-    /*_addCloseOnEsc(event) { //FIX:Добавил функцию обработки нажатия по ESC
-        if (event.key === 'Escape' && this._previewPopup.classList.contains('popup_opened')) {
-            this._previewPopup.classList.remove('popup_opened');
-        }
-    }*/
-
-    /*_removeCloseOnEsc() {
-        document.removeEventListener('keydown', (event) => {
-            this._addCloseOnEsc(event);
-        });
-    }*/
-
     _setEventListeners() { //Установка слушателей событий
         this._likeButton.addEventListener('click', () => { //Слушатель на кнопку like
             this._handleToggleLike(event); //Переключение состояние нажатой кнопки
@@ -43,17 +32,10 @@ export default class Card { //Экспорт класса Card в index.js
         this._deleteButton.addEventListener('click', () => { //Слушатель на кнопку delete
             this._handleRemoveCard(event); //Удаление карточки, на которую нажали
         });
-        /*this._picture.addEventListener('click', () => { //Слушатель на картинку
-            this._handlePreviewCard(event); //Увеличение нажатой картинки
-        });*/
-        /*this._closeButton.addEventListener('click', () => { //Слушатель на кнопку закрытия открытой картинки
-            this._handleClosePreview(); //Удаление класса popup_opened у открытой картинки
-        });*/
+        this._picture.addEventListener('click', () => {
+            this._handleCardClick(this._link, this._name);
+        });
     };
-
-    /*_handleClosePreview() {
-        this._previewPopup.classList.remove('popup_opened');
-    };*/
 
     _handleToggleLike(event) { //Преключение состояния кнопки like при нажатии
         event.target.classList.toggle('card__like_active');
@@ -69,8 +51,5 @@ export default class Card { //Экспорт класса Card в index.js
         this._previewPopup.querySelector('.popup__picture').src = event.target.src;
         this._previewPopup.querySelector('.popup__description').textContent = event.target.alt;
         this._closeButton = this._previewPopup.querySelector('.popup__close-preview');
-        /*document.addEventListener('keydown', (event) => { //FIX:Добавил слушатель по нажатию на ESC
-            this._addCloseOnEsc(event);
-        });*/
     };
 };
