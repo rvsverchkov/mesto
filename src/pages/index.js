@@ -1,11 +1,11 @@
-import './pages/index.css'; //FIX: Поднял импорт стилей CSS выше остальных импортов
-import {initialCards} from './scripts/utils/initial-cards.js';
-import Section from './scripts/components/Section.js'; 
-import PopupWithImage from './scripts/components/PopupWithImage.js';
-import Card from './scripts/components/Card.js';
-import FormValidator from './scripts/components/FormValidator.js';
-import PopupWithForm from './scripts/components/PopupWithForm.js';
-import UserInfo from './scripts/components/UserInfo.js';
+import './index.css'; //FIX: Поднял импорт стилей CSS выше остальных импортов
+import {initialCards} from '../scripts/utils/initial-cards.js';
+import Section from '../scripts/components/Section.js'; 
+import PopupWithImage from '../scripts/components/PopupWithImage.js';
+import Card from '../scripts/components/Card.js';
+import FormValidator from '../scripts/components/FormValidator.js';
+import PopupWithForm from '../scripts/components/PopupWithForm.js';
+import UserInfo from '../scripts/components/UserInfo.js';
 
 const validationConfig = {
     formSelector: '.popup__form',
