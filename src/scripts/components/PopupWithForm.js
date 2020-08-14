@@ -6,8 +6,8 @@ export default class PopupWithForm extends Popup {
         this._callbackFunction = callback; //Коллбек функция, передаваемая как аргумент
     }
 
-    open() { //Перезаписанная функция с открытием popup'а, в которой форма обнуляется
-        super.open();
+    close() { //Перезаписанная функция с открытием popup'а, в которой форма обнуляется //FIX: Заменил open() на close()
+        super.close();
         this._currentForm.reset();
     }
 
@@ -23,7 +23,7 @@ export default class PopupWithForm extends Popup {
     _submitHandler(event) { //Функция, срабатывающая при отправке формы и вызывающая функцию коллбек вместе с закрытием popup'а
         event.preventDefault();
         this._callbackFunction(this._getInputValues());
-        super.close();
+        this.close(); //FIX: Изменил вызов с super.close() на this._close()
     }
 
     setEventListeners() { //Установка слушателей

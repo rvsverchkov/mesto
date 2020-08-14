@@ -44,12 +44,6 @@ export default class Card { //Экспорт класса Card в index.js
     _handleRemoveCard(event) { //Удаление карточки
         const currentCard = event.target.closest('.card');
         currentCard.remove();
-    };
-
-    _handlePreviewCard(event) { //Открытие preview нажатой карточки
-        this._previewPopup.classList.toggle('popup_opened');
-        this._previewPopup.querySelector('.popup__picture').src = event.target.src;
-        this._previewPopup.querySelector('.popup__description').textContent = event.target.alt;
-        this._closeButton = this._previewPopup.querySelector('.popup__close-preview');
-    };
+        currentCard = null; //FIX: Добавил зануление карточки для освобождения памяти
+    }; //FIX: Удалил лишний метод
 };

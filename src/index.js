@@ -1,3 +1,4 @@
+import './pages/index.css'; //FIX: Поднял импорт стилей CSS выше остальных импортов
 import {initialCards} from './scripts/utils/initial-cards.js';
 import Section from './scripts/components/Section.js'; 
 import PopupWithImage from './scripts/components/PopupWithImage.js';
@@ -5,7 +6,6 @@ import Card from './scripts/components/Card.js';
 import FormValidator from './scripts/components/FormValidator.js';
 import PopupWithForm from './scripts/components/PopupWithForm.js';
 import UserInfo from './scripts/components/UserInfo.js';
-import './pages/index.css';
 
 const validationConfig = {
     formSelector: '.popup__form',
@@ -70,13 +70,17 @@ const popupAdd = new PopupWithForm('popup_create-card', { //Экземпляр �
     }
 )
 
+popupPreview.setEventListeners(); //FIX: Убрал из конструктора назначение слушателей и перенес их в index.js для каждого модального окна
+popupEdit.setEventListeners();
+popupAdd.setEventListeners();
+
 editPopupButton.addEventListener('click', () => { //Добавление слушателей при открытии popup'а редактирования профиля
     popupEdit.open();
     userInfo.getUserInfo();
     editPopupValidation.hideInputErrors();
-    buttons.forEach((button) => {
-        button.classList.add(validationConfig.inactiveButtonClass);
-        button.setAttribute('disabled', true);
+    buttons.forEach((button) => { //FIX: Исправил баг с неактивной кнопкой
+        button.classList.remove(validationConfig.inactiveButtonClass);
+        button.removeAttribute('disabled', true);
     });
 });
 
