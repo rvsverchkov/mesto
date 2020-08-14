@@ -44,6 +44,6 @@ export default class Card { //Экспорт класса Card в index.js
     _handleRemoveCard(event) { //Удаление карточки
         const currentCard = event.target.closest('.card');
         currentCard.remove();
-        currentCard = null; //FIX: Добавил зануление карточки для освобождения памяти
+        this._element = null; //FIX: Добавил зануление карточки для освобождения памяти //FIX2: Исправил ошибку с currentCard
     }; //FIX: Удалил лишний метод
 };
