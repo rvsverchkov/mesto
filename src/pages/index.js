@@ -1,11 +1,13 @@
 import './index.css'; //FIX: Поднял импорт стилей CSS выше остальных импортов
-import {initialCards} from '../scripts/utils/initial-cards.js';
 import Section from '../scripts/components/Section.js'; 
 import PopupWithImage from '../scripts/components/PopupWithImage.js';
 import Card from '../scripts/components/Card.js';
 import FormValidator from '../scripts/components/FormValidator.js';
 import PopupWithForm from '../scripts/components/PopupWithForm.js';
 import UserInfo from '../scripts/components/UserInfo.js';
+import Api from '../scripts/components/Api.js';
+
+let initialCardsList;
 
 const validationConfig = {
     formSelector: '.popup__form',
@@ -23,22 +25,15 @@ const editPopupButton = document.querySelector('.profile__edit-button');
 const addPopupButton = document.querySelector('.profile__add-button');
 
 const editPopupValidation = new FormValidator(validationConfig, editForm);
-const createPopupValidation = new FormValidator(validationConfig, addForm); 
+const createPopupValidation = new FormValidator(validationConfig, addForm);
 
-const initialCardsList = new Section({ //Изначальный массив созданных карточек с функцией
-    items: initialCards,
-    renderer: (item) => {
-        const card = new Card(item.name, item.link, '#card', {
-            handleCardClick: (src, name) => {
-                popupPreview.open(src, name);
-            }}).generateCard();
-        initialCardsList.addItem(card);
-        },
-    },
-    'elements'
-);
-
-initialCardsList.renderItems();
+const api = new Api({
+    baseUrl: 'https://mesto.nomoreparties.co/',
+    headers: {
+        authorization: '63c8231e-4dd4-48bc-b700-4bf0fbfba0d6',
+        'Content-Type': 'application/json'
+    }
+});
 
 const userInfo = new UserInfo({ //Экземпляр класса с информацией о пользователе
     userName: 'profile__name', 
@@ -55,12 +50,16 @@ const popupPreview = new PopupWithImage('popup_preview', { //Экземпляр 
 const popupEdit = new PopupWithForm('popup_edit-profile', { //Экземпляр класса popup'а с редактированием информации в профиле
     callback: ({name, activity}) => {
             userInfo.setUserInfo({name, activity});
+            api.patchUserInfo(name, activity).then((res) => {
+                console.log(res);
+            })
         }
     }
 );
 
 const popupAdd = new PopupWithForm('popup_create-card', { //Экземпляр класса popup'а с добавлением новой карточки в галлерею
     callback: ({place, link}) => {
+            api.addNewCard(place, link);
             const createdCard = new Card(place, link, '#card', {
                 handleCardClick: (src, name) => {
                     popupPreview.open(src, name);
@@ -68,7 +67,19 @@ const popupAdd = new PopupWithForm('popup_create-card', { //Экземпляр �
             initialCardsList.addItem(createdCard);
         }
     }
-)
+);
+
+function checkLikeOnCard () {
+    if (this._isLikedByMe) {
+        api.unsetLikeOnCard(this._card._id).then(res => {
+            this.handleToggleLike(res);
+        })
+    } else {
+        api.setLikeOnCard(this._card._id).then(res => {
+            this.handleToggleLike(res);
+        })
+    }
+};
 
 popupPreview.setEventListeners(); //FIX: Убрал из конструктора назначение слушателей и перенес их в index.js для каждого модального окна
 popupEdit.setEventListeners();
@@ -92,6 +103,32 @@ addPopupButton.addEventListener('click', () => { //Добавление слуш
         button.setAttribute('disabled', true);
     });
 })
+
+api.getInitialCards().then(elements => {
+    initialCardsList = new Section({ //Изначальный массив созданных карточек с функцией
+        items: elements.reverse(),
+        renderer: (item) => {
+            const card = new Card(item, checkLikeOnCard, '#card', userInfo.id,  {
+                handleCardClick: (src, name) => {
+                    popupPreview.open(src, name);
+                }}).generateCard();
+            initialCardsList.addItem(card);
+            },
+        },
+        'elements'
+    );
+    initialCardsList.renderItems();
+});
+
+api.getUserInfo().then((res) => {
+    userInfo.setUserInfo({
+        name: res.name,
+        activity: res.about,
+        id: res._id
+    })
+});
+
+console.log(userInfo);
 
 editPopupValidation.enableValidation(); //Активация валидации
 createPopupValidation.enableValidation(); //Активация валидации

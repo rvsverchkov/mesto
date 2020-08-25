@@ -1,12 +1,13 @@
 export default class UserInfo {
-    constructor({ userName, userData }) { //Конструктор
+    constructor({ userName, userData, }) { //Конструктор
         this._name = document.querySelector(`.${userName}`);
         this._job = document.querySelector(`.${userData}`);
     }
 
-    setUserInfo({name, activity}) { //Установка информации о пользователе
+    setUserInfo({name, activity, id}) { //Установка информации о пользователе
         this._name.textContent = name;
         this._job.textContent = activity;
+        this.id = id;
     }
 
     getUserInfo() { //Получение изначальной информации о пользователе (До изменения данных)

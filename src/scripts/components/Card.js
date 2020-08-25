@@ -1,9 +1,22 @@
 export default class Card { //Экспорт класса Card в index.js
-    constructor(name, link, selector, { handleCardClick }) { //Конструктор класса с вводимыми данными
-        this._link = link;
-        this._name = name;
+    constructor(currentCard, checkLikeOnCard, selector, id, { handleCardClick }) { //Конструктор класса с вводимыми данными
+        this._card = currentCard;
+        this._link = currentCard.link;
+        this._name = currentCard.name;
         this._template = selector;
         this._handleCardClick = handleCardClick;
+        this._currentId = currentCard._id;
+        this._owner = currentCard.owner;
+        this._likesCounter = currentCard.likes;
+        this._myId = id;
+        this._checkLikeOnCard = checkLikeOnCard.bind(this);
+        this._isLikedByMe = this._likesCounter.some((element) => {
+            if (element._id === this._myId) {
+                return true;
+            } else {
+                return false;
+            }
+        })
     };
 
     _getTemplate() { //Взятие шаблона карточки из .document
@@ -21,13 +34,19 @@ export default class Card { //Экспорт класса Card в index.js
         this._deleteButton = this._element.querySelector('.card__trash');
         this._previewPopup = document.querySelector('.popup_preview');
         this._closeButton = this._previewPopup.querySelector('.popup__close');
+        this._counter = this._element.querySelector('.card__like-count');
+        this._counter.textContent = this._likesCounter.length;
         this._setEventListeners(); //Установка слушателей событий
+        if (this._isLikedByMe) {
+            this._likeButton.classList.add('card__like_active');
+        }
         return this._element; //Возвращение готовой карточки
     };
 
     _setEventListeners() { //Установка слушателей событий
         this._likeButton.addEventListener('click', () => { //Слушатель на кнопку like
-            this._handleToggleLike(event); //Переключение состояние нажатой кнопки
+            //this._handleToggleLike(event); //Переключение состояния нажатой кнопки
+            this._checkLikeOnCard();
         });
         this._deleteButton.addEventListener('click', () => { //Слушатель на кнопку delete
             this._handleRemoveCard(event); //Удаление карточки, на которую нажали
@@ -37,8 +56,13 @@ export default class Card { //Экспорт класса Card в index.js
         });
     };
 
-    _handleToggleLike(event) { //Преключение состояния кнопки like при нажатии
-        event.target.classList.toggle('card__like_active');
+    handleToggleLike(res) { //Преключение состояния кнопки like при нажатии
+        this._counter.textContent = res.likes.length;
+        if (this._likeButton.classList.contains('card__like_active')) {
+            this._likeButton.classList.remove('card__like_active');
+        } else {
+            this._likeButton.classList.add('card__like_active');
+        }
     };
 
     _handleRemoveCard(event) { //Удаление карточки
