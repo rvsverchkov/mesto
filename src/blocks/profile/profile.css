@@ -5,6 +5,7 @@
 @import url(./__info/profile__info.css);
 @import url(./__name/profile__name.css);
 @import url(./__text/profile__text.css);
+@import url(./__overlay/profile__overlay.css);
 
 .profile {
     max-width: 882px;

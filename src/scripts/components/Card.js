@@ -1,12 +1,13 @@
 export default class Card { //Экспорт класса Card в index.js
-    constructor(currentCard, checkLikeOnCard, selector, id, { handleCardClick }) { //Конструктор класса с вводимыми данными
+    constructor(currentCard, checkLikeOnCard, deleteCard, selector, id, { handleCardClick }) { //Конструктор класса с вводимыми данными
         this._card = currentCard;
         this._link = currentCard.link;
         this._name = currentCard.name;
         this._template = selector;
         this._handleCardClick = handleCardClick;
+        this._deleteCard = deleteCard.bind(this);
         this._currentId = currentCard._id;
-        this._owner = currentCard.owner;
+        this._owner = currentCard.owner._id;
         this._likesCounter = currentCard.likes;
         this._myId = id;
         this._checkLikeOnCard = checkLikeOnCard.bind(this);
@@ -57,7 +58,7 @@ export default class Card { //Экспорт класса Card в index.js
             this._checkLikeOnCard();
         });
         this._deleteButton.addEventListener('click', () => { //Слушатель на кнопку delete
-            //this._handleRemoveCard(event); //Удаление карточки, на которую нажали
+            this._deleteCard(); //Удаление карточки, на которую нажали
         });
         this._picture.addEventListener('click', () => {
             this._handleCardClick(this._link, this._name);
@@ -73,9 +74,7 @@ export default class Card { //Экспорт класса Card в index.js
         }
     };
 
-    _handleRemoveCard(event) { //Удаление карточки
-        const currentCard = event.target.closest('.card');
-        currentCard.remove();
-        this._element = null; //FIX: Добавил зануление карточки для освобождения памяти //FIX2: Исправил ошибку с currentCard
+    handleRemoveCard() { //Удаление карточки
+        this._element.remove();
     }; //FIX: Удалил лишний метод
 };

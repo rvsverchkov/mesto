@@ -49,6 +49,16 @@ export default class Api {
             })
     }
 
+    patchUserPhoto(url) {
+        return fetch(`${this.baseUrl}v1/cohort-14/users/me/avatar`, {
+            method: 'PATCH',
+            headers: this.headers,
+            body: JSON.stringify({
+                avatar: url
+            })
+        })
+    }
+
     addNewCard(place, link) {
         return fetch(`${this.baseUrl}v1/cohort-14/cards`, {
             method: 'POST',
@@ -95,8 +105,18 @@ export default class Api {
             })
     }
 
-    deleteItems() {
-
+    removeMyCard(currentCardId) {
+        return fetch(`${this.baseUrl}v1/cohort-14/cards/${currentCardId}`, {
+            method: 'DELETE',
+            headers: this.headers
+        })
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    return Promise.reject(`Ошибка: ${res.status}`);
+                }
+            })
     }
 
     createItems() {

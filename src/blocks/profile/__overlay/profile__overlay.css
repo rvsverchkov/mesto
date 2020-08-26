@@ -1,0 +1,11 @@
+.profile__overlay {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.profile__overlay:hover {
+    background: rgba(0,0,0, 0.8) url('../../../images/pencil.svg') center no-repeat;
+}
