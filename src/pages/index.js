@@ -164,6 +164,7 @@ api.getUserInfo().then((res) => {
         activity: res.about,
         id: res._id
     })
+    avatar.style.background = `url('${res.avatar}')`;
 });
 
 editPopupValidation.enableValidation(); //Активация валидации
