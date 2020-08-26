@@ -17,7 +17,12 @@ export default class Card { //Экспорт класса Card в index.js
                 return false;
             }
         })
+        this._myCard = this._owner === this._myId;
     };
+
+    getCurrentId() {
+        return this._card._id;
+    }
 
     _getTemplate() { //Взятие шаблона карточки из .document
         const cardItem = document.querySelector(this._template).content.cloneNode(true);
@@ -40,6 +45,9 @@ export default class Card { //Экспорт класса Card в index.js
         if (this._isLikedByMe) {
             this._likeButton.classList.add('card__like_active');
         }
+        if (!this._myCard) {
+            this._deleteButton.remove();
+        }
         return this._element; //Возвращение готовой карточки
     };
 
@@ -49,7 +57,7 @@ export default class Card { //Экспорт класса Card в index.js
             this._checkLikeOnCard();
         });
         this._deleteButton.addEventListener('click', () => { //Слушатель на кнопку delete
-            this._handleRemoveCard(event); //Удаление карточки, на которую нажали
+            //this._handleRemoveCard(event); //Удаление карточки, на которую нажали
         });
         this._picture.addEventListener('click', () => {
             this._handleCardClick(this._link, this._name);

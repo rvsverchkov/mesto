@@ -59,24 +59,24 @@ const popupEdit = new PopupWithForm('popup_edit-profile', { //Экземпляр
 
 const popupAdd = new PopupWithForm('popup_create-card', { //Экземпляр класса popup'а с добавлением новой карточки в галлерею
     callback: ({place, link}) => {
-            api.addNewCard(place, link);
-            const createdCard = new Card(place, link, '#card', {
-                handleCardClick: (src, name) => {
-                    popupPreview.open(src, name);
-            }}).generateCard();
-            initialCardsList.addItem(createdCard);
+        api.addNewCard(place, link).then((res) => {
+            initialCardsList.addItem(createCard(res));
+            popupAdd.close();
+            })
         }
     }
 );
 
 function checkLikeOnCard () {
     if (this._isLikedByMe) {
-        api.unsetLikeOnCard(this._card._id).then(res => {
+        api.unsetLikeOnCard(this.getCurrentId()).then(res => {
             this.handleToggleLike(res);
+            console.log(res);
         })
     } else {
-        api.setLikeOnCard(this._card._id).then(res => {
+        api.setLikeOnCard(this.getCurrentId()).then(res => {
             this.handleToggleLike(res);
+            console.log(res);
         })
     }
 };
@@ -103,6 +103,15 @@ addPopupButton.addEventListener('click', () => { //Добавление слуш
         button.setAttribute('disabled', true);
     });
 })
+
+function createCard(item) {
+    const createdCard = new Card(item, checkLikeOnCard, '#card', userInfo.id, handleCardClick)
+    return createdCard.generateCard();
+}
+
+function handleCardClick(src, name) {
+    popupPreview.open(src, name);
+}
 
 api.getInitialCards().then(elements => {
     initialCardsList = new Section({ //Изначальный массив созданных карточек с функцией
