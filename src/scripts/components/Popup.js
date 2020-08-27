@@ -2,21 +2,17 @@ export default class Popup {
     constructor(popupSelector) { //Конструктор
         this._popup = document.querySelector(`.${popupSelector}`);
         this._popupCloseButton = this._popup.querySelector(`.popup__close`);
-        this._handleEscClose = this._handleEscClose.bind(this);
+        this._handleEscClose = this.handleEscClose.bind(this);
     }
 
     open() { //Функция открытия popup'а
         this._popup.classList.add('popup_opened');
-        document.addEventListener('keydown', () => { //FIX: Заменил дублирующиеся методы на одну строчку кода
-            this._handleEscClose(event);
-        });
+        document.addEventListener('keydown', this._handleEscClose); //FIX: Убрал анонимную функцию
     }
 
     close() { //Функция закрытия popup'а
         this._popup.classList.remove('popup_opened');
-        document.removeEventListener('keydown', () => { //FIX: Заменил дублирующиеся методы на одну строчку кода
-            this._handleEscClose(event);
-        });
+        document.removeEventListener('keydown', this._handleEscClose); //FIX: Убрал анонимную функцию
     }
 
     _handleOverlayClose() { //Функция закрытия popup'а при нажатии на Overlay
@@ -25,7 +21,7 @@ export default class Popup {
         }
     }
 
-    _handleEscClose(event) { //Функция закрытия popup'а при нажатии на ESC
+    handleEscClose(event) { //Функция закрытия popup'а при нажатии на ESC
         if (event.key === 'Escape') {
             this.close();
         }
