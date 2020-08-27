@@ -24,10 +24,13 @@ const validationConfig = {
 const buttons = Array.from(document.querySelectorAll('.popup__save'));
 const editForm = document.querySelector('.popup__form-edit');
 const addForm = document.querySelector('.popup__form-add');
+const changeForm = document.querySelector('.popup__form-change');
+const removeForm = document.querySelector('.popup__form-remove');
 const editPopupButton = document.querySelector('.profile__edit-button');
 const addPopupButton = document.querySelector('.profile__add-button');
 const changePhotoButton = document.querySelector('.profile__overlay');
 const avatar = document.querySelector('.profile__avatar');
+const id = 'bc7231aacf0ef6b64ae2a85f';
 
 const editPopupValidation = new FormValidator(validationConfig, editForm);
 const createPopupValidation = new FormValidator(validationConfig, addForm);
@@ -39,6 +42,32 @@ const api = new Api({
         'Content-Type': 'application/json'
     }
 });
+
+Promise.all([
+    api.getUserInfo(),
+    api.getInitialCards()
+])
+    .then((values) => {
+        const [userData, initialCards] = values;
+        initialCardsList = new Section({ //Изначальный массив созданных карточек с функцией
+            items: initialCards.reverse(),
+            renderer: (item) => {
+                initialCardsList.addItem(createCard(item));
+                },
+            },
+            'elements'
+        );
+        initialCardsList.renderItems();
+        userInfo.setUserInfo({
+            name: userData.name,
+            activity: userData.about,
+            id: userData._id
+        })
+        avatar.style.background = `url('${userData.avatar}')`;
+    })
+    .catch((err) => {
+        console.log(err);
+    })
 
 const userInfo = new UserInfo({ //Экземпляр класса с информацией о пользователе
     userName: 'profile__name', 
@@ -58,9 +87,10 @@ const popupEdit = new PopupWithForm('popup_edit-profile', { //Экземпляр
         api.patchUserInfo(name, activity)
             .then(() => {
                 userInfo.setUserInfo({name, activity});
+                popupEdit.close();
             })
-            .catch(() => {
-                console.error('User data cannot be changed');
+            .catch((err) => {
+                console.log(err);
             })
             .finally(() => {
                 popupEdit._saveButton.textContent = 'Сохранить';
@@ -77,8 +107,8 @@ const popupAdd = new PopupWithForm('popup_create-card', { //Экземпляр �
                 initialCardsList.addItem(createCard(res));
                 popupAdd.close();
             })
-            .catch(() => {
-                console.error('User picture cannon be upload to the server');
+            .catch((err) => {
+                console.log(err);
             })
             .finally(() => {
                 popupAdd._saveButton.textContent = 'Сохранить';
@@ -92,8 +122,8 @@ const popupRemove = new PopupWithConfirm('popup_remove-card', () => {
         .then(() => {
             popupRemove.close();
         })
-        .catch(() => {
-            console.error('User picture cannot be remove from the server');
+        .catch((err) => {
+            console.log(err);
         })
         .finally(() => {
             currentCard.handleRemoveCard();
@@ -102,12 +132,17 @@ const popupRemove = new PopupWithConfirm('popup_remove-card', () => {
 
 const popupUpdatePhoto = new PopupWithForm('popup_update-photo', {
     callback: ({url}) => {
+        popupUpdatePhoto._saveButton.textContent = 'Сохранение...';
         api.patchUserPhoto(url)
             .then(() => {
                 avatar.style.background = `url('${url}')`;
             })
-            .catch(() => {
-                console.error('User avatar cannon be update');
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                popupUpdatePhoto.close();
+                popupUpdatePhoto._saveButton.textContent = 'Сохранить';
             })
     }
 })
@@ -147,71 +182,37 @@ function checkLikeOnCard () {
                 this.handleToggleLike(res);
             })
             .catch(() => {
-                console.error('User like cannot be delete');
+                console.log(err);
             })
     } else {
         api.setLikeOnCard(this.getCurrentId())
             .then((res) => {
                 this.handleToggleLike(res);
             })
-            .catch(() => {
-                console.error('User like cannot be add');
+            .catch((err) => {
+                console.log(err);
             })
     }
 };
 
 function deleteCard () {
+    buttons.forEach((button) => {
+        button.classList.remove(validationConfig.inactiveButtonClass);
+        button.removeAttribute('disabled', true);
+    });
     currentCard = this;
     popupRemove.open();
     popupRemove.setEventListeners();
 }
 
 function createCard(item) {
-    const createdCard = new Card(item, checkLikeOnCard, deleteCard, '#card', userInfo.id, {
+    const createdCard = new Card(item, checkLikeOnCard, deleteCard, '#card', id, {
         handleCardClick: (src, name) => {
             popupPreview.open(src, name);
         }
     });
     return createdCard.generateCard();
 }
-
-api.getInitialCards().then(elements => {
-    initialCardsList = new Section({ //Изначальный массив созданных карточек с функцией
-        items: elements.reverse(),
-        renderer: (item) => {
-            initialCardsList.addItem(createCard(item));
-            },
-        },
-        'elements'
-    );
-    initialCardsList.renderItems();
-});
-
-api.getUserInfo().then((res) => {
-    userInfo.setUserInfo({
-        name: res.name,
-        activity: res.about,
-        id: res._id
-    })
-    avatar.style.background = `url('${res.avatar}')`;
-});
-
-/*Promise.all([
-    api.getUserInfo(),
-    api.getInitialCards()
-])
-    .then((values) => {
-        const [userInfo, initialCards] = values;
-        initialCardsList = new Section({ //Изначальный массив созданных карточек с функцией
-            items: elements.reverse(),
-            renderer: (item) => {
-                initialCardsList.addItem(createCard(item));
-                },
-            },
-            'elements'
-        );
-        initialCardsList.renderItems();
-    })*/
 
 editPopupValidation.enableValidation(); //Активация валидации
 createPopupValidation.enableValidation(); //Активация валидации

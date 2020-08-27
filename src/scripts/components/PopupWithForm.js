@@ -24,7 +24,6 @@ export default class PopupWithForm extends Popup {
     _submitHandler(event) { //Функция, срабатывающая при отправке формы и вызывающая функцию коллбек вместе с закрытием popup'а
         event.preventDefault();
         this._callbackFunction(this._getInputValues());
-        this.close(); //FIX: Изменил вызов с super.close() на this._close()
     }
 
     setEventListeners() { //Установка слушателей
