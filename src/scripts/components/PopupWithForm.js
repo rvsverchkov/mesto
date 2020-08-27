@@ -4,6 +4,7 @@ export default class PopupWithForm extends Popup {
     constructor(popup, {callback}) { //Конструктор
         super(popup);
         this._callbackFunction = callback; //Коллбек функция, передаваемая как аргумент
+        this._saveButton = this._popup.querySelector('.popup__save');
     }
 
     close() { //Перезаписанная функция с открытием popup'а, в которой форма обнуляется //FIX: Заменил open() на close()

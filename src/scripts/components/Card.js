@@ -54,7 +54,6 @@ export default class Card { //Экспорт класса Card в index.js
 
     _setEventListeners() { //Установка слушателей событий
         this._likeButton.addEventListener('click', () => { //Слушатель на кнопку like
-            //this._handleToggleLike(event); //Переключение состояния нажатой кнопки
             this._checkLikeOnCard();
         });
         this._deleteButton.addEventListener('click', () => { //Слушатель на кнопку delete

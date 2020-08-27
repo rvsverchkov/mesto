@@ -54,34 +54,61 @@ const popupPreview = new PopupWithImage('popup_preview', { //Экземпляр 
 
 const popupEdit = new PopupWithForm('popup_edit-profile', { //Экземпляр класса popup'а с редактированием информации в профиле
     callback: ({name, activity}) => {
-            userInfo.setUserInfo({name, activity});
-            api.patchUserInfo(name, activity);
+        popupEdit._saveButton.textContent = 'Сохранение...';
+        api.patchUserInfo(name, activity)
+            .then(() => {
+                userInfo.setUserInfo({name, activity});
+            })
+            .catch(() => {
+                console.error('User data cannot be changed');
+            })
+            .finally(() => {
+                popupEdit._saveButton.textContent = 'Сохранить';
+            })
         }
     }
 );
 
 const popupAdd = new PopupWithForm('popup_create-card', { //Экземпляр класса popup'а с добавлением новой карточки в галлерею
     callback: ({place, link}) => {
-        api.addNewCard(place, link).then((res) => {
-            initialCardsList.addItem(createCard(res));
-            popupAdd.close();
+        popupAdd._saveButton.textContent = 'Сохранение...';
+        api.addNewCard(place, link)
+            .then((res) => {
+                initialCardsList.addItem(createCard(res));
+                popupAdd.close();
+            })
+            .catch(() => {
+                console.error('User picture cannon be upload to the server');
+            })
+            .finally(() => {
+                popupAdd._saveButton.textContent = 'Сохранить';
             })
         }
     }
 );
 
 const popupRemove = new PopupWithConfirm('popup_remove-card', () => {
-    api.removeMyCard(currentCard.getCurrentId()).then(() => {
-        popupRemove.close();
-        currentCard.handleRemoveCard();
-    });
+    api.removeMyCard(currentCard.getCurrentId())
+        .then(() => {
+            popupRemove.close();
+        })
+        .catch(() => {
+            console.error('User picture cannot be remove from the server');
+        })
+        .finally(() => {
+            currentCard.handleRemoveCard();
+        })
 });
 
 const popupUpdatePhoto = new PopupWithForm('popup_update-photo', {
     callback: ({url}) => {
-        api.patchUserPhoto(url).then(() => {
-            avatar.style.background = `url('${url}')`;
-        })
+        api.patchUserPhoto(url)
+            .then(() => {
+                avatar.style.background = `url('${url}')`;
+            })
+            .catch(() => {
+                console.error('User avatar cannon be update');
+            })
     }
 })
 
@@ -115,15 +142,21 @@ changePhotoButton.addEventListener('click', () => {
 
 function checkLikeOnCard () {
     if (this._isLikedByMe) {
-        api.unsetLikeOnCard(this.getCurrentId()).then(res => {
-            this.handleToggleLike(res);
-            console.log(res);
-        })
+        api.unsetLikeOnCard(this.getCurrentId())
+            .then((res) => {
+                this.handleToggleLike(res);
+            })
+            .catch(() => {
+                console.error('User like cannot be delete');
+            })
     } else {
-        api.setLikeOnCard(this.getCurrentId()).then(res => {
-            this.handleToggleLike(res);
-            console.log(res);
-        })
+        api.setLikeOnCard(this.getCurrentId())
+            .then((res) => {
+                this.handleToggleLike(res);
+            })
+            .catch(() => {
+                console.error('User like cannot be add');
+            })
     }
 };
 
@@ -134,23 +167,19 @@ function deleteCard () {
 }
 
 function createCard(item) {
-    const createdCard = new Card(item, checkLikeOnCard, deleteCard, '#card', userInfo.id, handleCardClick)
+    const createdCard = new Card(item, checkLikeOnCard, deleteCard, '#card', userInfo.id, {
+        handleCardClick: (src, name) => {
+            popupPreview.open(src, name);
+        }
+    });
     return createdCard.generateCard();
-}
-
-function handleCardClick(src, name) {
-    popupPreview.open(src, name);
 }
 
 api.getInitialCards().then(elements => {
     initialCardsList = new Section({ //Изначальный массив созданных карточек с функцией
         items: elements.reverse(),
         renderer: (item) => {
-            const card = new Card(item, checkLikeOnCard, deleteCard, '#card', userInfo.id,  {
-                handleCardClick: (src, name) => {
-                    popupPreview.open(src, name);
-                }}).generateCard();
-            initialCardsList.addItem(card);
+            initialCardsList.addItem(createCard(item));
             },
         },
         'elements'
@@ -166,6 +195,23 @@ api.getUserInfo().then((res) => {
     })
     avatar.style.background = `url('${res.avatar}')`;
 });
+
+/*Promise.all([
+    api.getUserInfo(),
+    api.getInitialCards()
+])
+    .then((values) => {
+        const [userInfo, initialCards] = values;
+        initialCardsList = new Section({ //Изначальный массив созданных карточек с функцией
+            items: elements.reverse(),
+            renderer: (item) => {
+                initialCardsList.addItem(createCard(item));
+                },
+            },
+            'elements'
+        );
+        initialCardsList.renderItems();
+    })*/
 
 editPopupValidation.enableValidation(); //Активация валидации
 createPopupValidation.enableValidation(); //Активация валидации
